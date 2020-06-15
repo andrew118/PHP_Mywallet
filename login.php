@@ -21,9 +21,13 @@
 		$login = $_POST['login'];
 		$password = $_POST['password'];
 		
-		$sql = "SELECT id, username FROM users WHERE username='$login' AND password='$password'";
+		$login = htmlentities($login, ENT_QUOTES, "UTF-8");
+		$password = htmlentities($password, ENT_QUOTES, "UTF-8");
 		
-		if ($result = $db_connection->query($sql))
+		if ($result = $db_connection->query(
+		sprintf("SELECT id, username FROM users WHERE username='%s' AND password='%s'",
+		mysqli_real_escape_string($db_connection, $login),
+		mysqli_real_escape_string($db_connection, $password))))
 		{
 			$result_count = $result->num_rows;
 			
