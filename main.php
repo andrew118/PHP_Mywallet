@@ -52,11 +52,11 @@
 							<ul class="navbar-nav">
 								
 								<li class="nav-item">
-									<a class="nav-link" href="income.html"><i class="icon-money"></i> Dodaj przychód </a>
+									<a class="nav-link" href="income.php"><i class="icon-money"></i> Dodaj przychód </a>
 								</li>
 								
 								<li class="nav-item">
-									<a class="nav-link" href="expanse.html"><i class="icon-basket"></i> Dodaj wydatek </a>
+									<a class="nav-link" href="expanse.php"><i class="icon-basket"></i> Dodaj wydatek </a>
 								</li>
 								
 								<li class="nav-item dropdown">
@@ -64,8 +64,8 @@
 									
 									<div class="dropdown-menu wallet" aria-labelledby="submenu">
 										
-										<a class="dropdown-item" href="balance.html"> Bierzący miesiąc </a>
-										<a class="dropdown-item" href="balance.html"> Poprzedni miesiąc </a>
+										<a class="dropdown-item" href="###"> Bierzący miesiąc </a>
+										<a class="dropdown-item" href="###"> Poprzedni miesiąc </a>
 										<button class="dropdown-item btn btn-link"  data-toggle="modal" data-target="#dateRangeModal"> Inny zakres </button>
 										
 									</div>
@@ -73,11 +73,11 @@
 								</li>
 								
 								<li class="nav-item">
-									<a class="nav-link" href="settings.html"><i class="icon-conf"></i> Ustawienia </a>
+									<a class="nav-link" href="###"><i class="icon-conf"></i> Ustawienia </a>
 								</li>
 								
 								<li class="nav-item">
-									<a class="nav-link" href="index.html"><i class="icon-logout"></i> Wyloguj </a>
+									<a class="nav-link" href="logout.php"><i class="icon-logout"></i> Wyloguj </a>
 								</li>
 								
 							</ul>

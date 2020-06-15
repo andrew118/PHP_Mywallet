@@ -8,7 +8,6 @@
 		exit();
 	}	
 	
-	
 ?>
 
 <!DOCTYPE html>
