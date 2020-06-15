@@ -49,7 +49,7 @@
 					<div class="row">
 						<div class="col-10 col-sm-8 col-md-6 col-lg-4 mx-auto rounded" style="border: 1px #f2f2f2 dashed; background-color: rgba(242, 242, 242, 0.2); ">
 							
-							<form action="#">
+							<form action="login.php" method="post">
 								
 								<div class="col-10 offset-1 mt-5">
 									<input type="text" class="form-control mb-3" id="login" placeholder="Podaj login" name="login">
