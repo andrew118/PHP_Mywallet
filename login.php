@@ -28,13 +28,16 @@
 				$_SESSION['logged_user_id'] = $row['id'];
 				$_SESSION['user'] = $row['username'];
 				
-				header('Location: main.php');
+				unset($_SESSION['error']);
 				
 				$result->free();
+				
+				header('Location: main.php');
 			}
 			else
 			{
-				
+				$_SESSION['error'] = '<div class="alert alert-danger col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" role="alert">Niepoprawne dane!</div>';
+				header('Location: index.php');
 			}
 		}
 		

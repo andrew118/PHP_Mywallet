@@ -1,3 +1,9 @@
+<?php
+
+	session_start();
+
+?>
+
 <!DOCTYPE html>
 <html lang="pl">
   <head>
@@ -36,13 +42,10 @@
 					</div>
 				</header>
 				
-				<div id="info" class="alert alert-danger col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" style="display: none;" role="alert">
-					Niepoprawne dane!
-				</div>
-				
-				<div id="infoOk" class="alert alert-success col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" style="display: none;" role="alert">
-					Zalogowałeś się pomyślnie.
-				</div>
+				<?php
+				if (isset($_SESSION['error']))
+					echo $_SESSION['error'];
+				?>
 				
 				<section>
 					
