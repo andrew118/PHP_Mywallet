@@ -1,5 +1,7 @@
 <?php
-
+	
+	session_start();
+	
 	require_once "connect.php";
 	
 	$db_connection = @new mysqli($host, $db_user, $db_password, $db_name);
@@ -13,7 +15,7 @@
 		$login = $_POST['login'];
 		$password = $_POST['password'];
 		
-		$sql = "SELECT * FROM users WHERE username='$login' AND password='$password'";
+		$sql = "SELECT id, username FROM users WHERE username='$login' AND password='$password'";
 		
 		if ($result = $db_connection->query($sql))
 		{
@@ -23,7 +25,10 @@
 			{
 				$row = $result->fetch_assoc();
 				
-				echo '1. '.$row['id'].' 2. '.$row['username'].' 3. '.$row['password'].' 4. '.$row['email'];
+				$_SESSION['logged_user_id'] = $row['id'];
+				$_SESSION['user'] = $row['username'];
+				
+				header('Location: main.php');
 				
 				$result->free();
 			}
