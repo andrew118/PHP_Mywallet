@@ -25,6 +25,7 @@
 			{
 				$row = $result->fetch_assoc();
 				
+				$_SESSION['is_user_logged'] = true;
 				$_SESSION['logged_user_id'] = $row['id'];
 				$_SESSION['user'] = $row['username'];
 				
