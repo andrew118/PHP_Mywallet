@@ -1,3 +1,15 @@
+<?php
+
+	session_start();
+
+	if (isset($_SESSION['is_user_logged']) && ($_SESSION['is_user_logged'] == true))
+	{
+		header('Location: main.php');
+		exit();
+	}	
+	
+?>
+
 <!DOCTYPE html>
 <html lang="pl">
   <head>
@@ -36,20 +48,17 @@
 					</div>
 				</header>
 				
-				<div id="info" class="alert alert-danger col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" style="display: none;" role="alert">
-					Niepoprawne dane!
-				</div>
-				
-				<div id="infoOk" class="alert alert-success col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" style="display: none;" role="alert">
-					Zalogowałeś się pomyślnie.
-				</div>
+				<?php
+				if (isset($_SESSION['error']))
+					echo $_SESSION['error'];
+				?>
 				
 				<section>
 					
 					<div class="row">
 						<div class="col-10 col-sm-8 col-md-6 col-lg-4 mx-auto rounded" style="border: 1px #f2f2f2 dashed; background-color: rgba(242, 242, 242, 0.2); ">
 							
-							<form action="#">
+							<form action="login.php" method="post">
 								
 								<div class="col-10 offset-1 mt-5">
 									<input type="text" class="form-control mb-3" id="login" placeholder="Podaj login" name="login">
