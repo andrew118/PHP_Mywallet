@@ -44,6 +44,8 @@
 			$_SESSION['e_password'] = "Podane hasła nie są identyczne";
 		}
 		
+		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+		echo $hashed_password; exit();
 		
 		if ($form_valid == true)
 		{
