@@ -12,14 +12,12 @@
 		{
 			$form_valid = false;
 			$_SESSION['e_login'] = "Login musi posiadać od 3 do 20 znaków";
-			echo $_SESSION['e_login'];
 		}
 		
 		if (ctype_alnum($login) == false)
 		{
 			$form_valid = false;
 			$_SESSION['e_login'] = "Login może składać się tylko z liter i cyfr (bez polskich znaków)";
-			echo $_SESSION['e_login'];
 		}
 		
 		
@@ -29,7 +27,6 @@
 		{
 			$form_valid = false;
 			$_SESSION['e_email'] = "Podaj poprawny adres e-mail";
-			echo $_SESSION['e_email'];
 		}
 		
 		
@@ -39,14 +36,12 @@
 		{
 			$form_valid = false;
 			$_SESSION['e_password'] = "Niepoprawne hasło - od 8 do 30 znaków";
-			echo $_SESSION['e_password'];
 		}
 		
 		if ($password != $password_compare)
 		{
 			$form_valid = false;
 			$_SESSION['e_password'] = "Podane hasła nie są identyczne";
-			echo $_SESSION['e_password'];
 		}
 		
 		
@@ -97,11 +92,33 @@
 					
 					</div>
 				</header>
-<!--		
-				<div id="info" class="alert alert-danger col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" style="display: none;" role="alert">
-					
-				</div>
+							
+				<?php
 				
+				$alert1 = '<div id="info" class="alert alert-danger col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" role="alert">';
+				$alert2 = '</div>';
+				
+				if (isset($_SESSION['e_login']))
+				{
+					echo $alert1.$_SESSION['e_login'].$alert2;
+					unset($_SESSION['e_login']);
+				}
+				
+				if (isset($_SESSION['e_email']))
+				{
+					echo $alert1.$_SESSION['e_email'].$alert2;
+					unset($_SESSION['e_email']);
+				}
+				
+				if (isset($_SESSION['e_password']))
+				{
+					echo $alert1.$_SESSION['e_password'].$alert2;
+					unset($_SESSION['e_password']);
+				}
+				
+				?>
+
+<!--						
 				<div id="infoOk" class="alert alert-success col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" style="display: none;" role="alert">
 					OK. Możesz się teraz zalogować.
 				</div>
