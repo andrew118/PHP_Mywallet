@@ -1,6 +1,27 @@
 <?php
 
 	session_start();
+	
+	if (isset($_POST['email']))
+	{
+		$form_valid = true;
+		
+		
+		$login = $_POST['login'];
+		if ((strlen($login) < 3) || strlen($login) > 50)
+		{
+			$form_valid = false;
+			$_SESSION['e_login'] = "Login musi posiadać od 3 do 50 znaków";
+			echo $_SESSION['e_login'];
+		}
+		
+		if ($form_valid == true)
+		{
+			// insert into BD
+			echo "Formularz poprawny";
+			exit();
+		}
+	}
 
 ?>
 
@@ -55,7 +76,7 @@
 					<div class="row">
 						<div class="col-10 col-sm-8 col-md-6 col-lg-4 mx-auto rounded" style="border: 1px #f2f2f2 dashed; background-color: rgba(242, 242, 242, 0.2); ">
 							
-							<form action="#">
+							<form method="post">
 								
 								<div class="col-10 offset-1">
 									<input type="text" class="form-control mt-5 mb-3" placeholder="Podaj login" name="login">
