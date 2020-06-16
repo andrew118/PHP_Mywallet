@@ -47,11 +47,65 @@
 		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 		
 		
-		if ($form_valid == true)
+		require_once "connect.php";
+		mysqli_report(MYSQLI_REPORT_STRICT);
+		
+		try
 		{
-			// insert into BD
-			echo "Formularz poprawny";
-			exit();
+			$db_connection = new mysqli($host, $db_user, $db_password, $db_name);
+			
+			if ($db_connection->connect_errno != 0)
+			{
+				throw new Exception(mysqli_connect_errno());
+			}
+			else
+			{
+				$result = $db_connection->query("SELECT id FROM users WHERE email='$email'");
+				
+				if (!$result)
+					throw new Exception($db_connection->error);
+				
+				$amount_email = $result->num_rows;
+				if ($amount_email > 0)
+				{
+					$form_valid = false;
+					$_SESSION['e_email'] = "Podany adres e-mail jest zajęty";
+				}
+				
+				
+				$result = $db_connection->query("SELECT id FROM users WHERE username='$login'");
+				if (!$result)
+					throw new Exception($db_connection->error);
+				
+				$amount_name = $result->num_rows;
+				if ($amount_name > 0)
+				{
+					$form_valid = false;
+					$_SESSION['e_login'] = "Podany login jest zajęty";
+				}
+				
+				
+				if ($form_valid == true)
+				{
+					if ($db_connection->query("INSERT INTO users VALUES (NULL, '$login', '$hashed_password', '$email')"))
+					{
+						$_SESSION['register_succed'] = true;
+						header('Location: index.php');
+					}
+					else
+					{
+						throw new Exception($db_connection->error);
+					}
+				}
+				
+				
+				$db_connection->close();
+			}
+		}
+		catch(Exception $e)
+		{
+			echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.';
+			echo 'Dev Info: '.$e;
 		}
 	}
 
@@ -97,7 +151,7 @@
 							
 				<?php
 				
-				$alert1 = '<div id="info" class="alert alert-danger col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" role="alert">';
+				$alert1 = '<div class="alert alert-danger col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" role="alert">';
 				$alert2 = '</div>';
 				
 				if (isset($_SESSION['e_login']))
@@ -119,12 +173,7 @@
 				}
 				
 				?>
-
-<!--						
-				<div id="infoOk" class="alert alert-success col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" style="display: none;" role="alert">
-					OK. Możesz się teraz zalogować.
-				</div>
--->				
+		
 				<section>
 					
 					<div class="row">
