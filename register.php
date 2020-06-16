@@ -8,10 +8,10 @@
 		
 		
 		$login = $_POST['login'];
-		if ((strlen($login) < 3) || strlen($login) > 50)
+		if ((strlen($login) < 3) || strlen($login) > 20)
 		{
 			$form_valid = false;
-			$_SESSION['e_login'] = "Login musi posiadać od 3 do 50 znaków";
+			$_SESSION['e_login'] = "Login musi posiadać od 3 do 20 znaków";
 			echo $_SESSION['e_login'];
 		}
 		
@@ -32,6 +32,22 @@
 			echo $_SESSION['e_email'];
 		}
 		
+		
+		$password = $_POST['password'];
+		$password_compare = $_POST['passCompare'];
+		if ((strlen($password) < 8) || (strlen($password) > 30))
+		{
+			$form_valid = false;
+			$_SESSION['e_password'] = "Niepoprawne hasło - od 8 do 30 znaków";
+			echo $_SESSION['e_password'];
+		}
+		
+		if ($password != $password_compare)
+		{
+			$form_valid = false;
+			$_SESSION['e_password'] = "Podane hasła nie są identyczne";
+			echo $_SESSION['e_password'];
+		}
 		
 		
 		if ($form_valid == true)
