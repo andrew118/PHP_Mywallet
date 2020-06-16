@@ -15,6 +15,13 @@
 			echo $_SESSION['e_login'];
 		}
 		
+		if (ctype_alnum($login) == false)
+		{
+			$form_valid = false;
+			$_SESSION['e_login'] = "Login może składać się tylko z liter i cyfr (bez polskich znaków)";
+			echo $_SESSION['e_login'];
+		}
+		
 		if ($form_valid == true)
 		{
 			// insert into BD
