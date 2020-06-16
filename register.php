@@ -22,6 +22,18 @@
 			echo $_SESSION['e_login'];
 		}
 		
+		
+		$email = $_POST['email'];
+		$email_sanitized = filter_var($email, FILTER_SANITIZE_EMAIL);
+		if ((filter_var($email_sanitized, FILTER_VALIDATE_EMAIL) == false) || ($email_sanitized != $email))
+		{
+			$form_valid = false;
+			$_SESSION['e_email'] = "Podaj poprawny adres e-mail";
+			echo $_SESSION['e_email'];
+		}
+		
+		
+		
 		if ($form_valid == true)
 		{
 			// insert into BD
@@ -94,7 +106,7 @@
 								</div>
 								
 								<div class="col-10 offset-1">
-									<input type="password" class="form-control mb-3" id="passwordCompare" placeholder="Powtórz hasło" name="passCheck">
+									<input type="password" class="form-control mb-3" id="passwordCompare" placeholder="Powtórz hasło" name="passCompare">
 								</div>
 								
 								<div class="col-10 offset-1">
