@@ -22,12 +22,10 @@
 		$password = $_POST['password'];
 		
 		$login = htmlentities($login, ENT_QUOTES, "UTF-8");
-		$password = htmlentities($password, ENT_QUOTES, "UTF-8");
 		
 		if ($result = $db_connection->query(
-		sprintf("SELECT id, username FROM users WHERE username='%s' AND password='%s'",
-		mysqli_real_escape_string($db_connection, $login),
-		mysqli_real_escape_string($db_connection, $password))))
+		sprintf("SELECT id, username, password FROM users WHERE username='%s'",
+		mysqli_real_escape_string($db_connection, $login))))
 		{
 			$result_count = $result->num_rows;
 			
@@ -35,19 +33,27 @@
 			{
 				$row = $result->fetch_assoc();
 				
-				$_SESSION['is_user_logged'] = true;
-				$_SESSION['logged_user_id'] = $row['id'];
-				$_SESSION['user'] = $row['username'];
-				
-				unset($_SESSION['error']);
-				
-				$result->free();
-				
-				header('Location: main.php');
+				if (password_verify($password, $row['password']))
+				{
+					$_SESSION['is_user_logged'] = true;
+					$_SESSION['logged_user_id'] = $row['id'];
+					$_SESSION['user'] = $row['username'];
+					
+					unset($_SESSION['error']);
+					
+					$result->free();
+					
+					header('Location: main.php');
+				}
+				else
+				{
+					$_SESSION['error'] = '<div class="alert alert-danger col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" role="alert">Niepoprawny login lub hasło</div>';
+					header('Location: index.php');
+				}
 			}
 			else
 			{
-				$_SESSION['error'] = '<div class="alert alert-danger col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" role="alert">Niepoprawne dane!</div>';
+				$_SESSION['error'] = '<div class="alert alert-danger col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" role="alert">Niepoprawny login lub hasło</div>';
 				header('Location: index.php');
 			}
 		}
