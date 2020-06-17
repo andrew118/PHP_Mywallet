@@ -24,7 +24,7 @@
 		$login = htmlentities($login, ENT_QUOTES, "UTF-8");
 		
 		if ($result = $db_connection->query(
-		sprintf("SELECT id, username, password FROM users WHERE username='%s'",
+		sprintf("SELECT id, username, password FROM users WHERE BINARY username='%s'",
 		mysqli_real_escape_string($db_connection, $login))))
 		{
 			$result_count = $result->num_rows;
