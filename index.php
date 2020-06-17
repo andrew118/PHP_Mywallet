@@ -49,8 +49,19 @@
 				</header>
 				
 				<?php
+				
 				if (isset($_SESSION['error']))
+				{	
 					echo $_SESSION['error'];
+					unset($_SESSION['error']);
+				}
+				
+				if (isset($_SESSION['register_succed']))
+				{	
+					echo '<div class="alert alert-success col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" role="alert">Zarejestrowałeś się. Możesz się teraz zalogować.</div>';
+					unset($_SESSION['register_succed']);
+				}
+				
 				?>
 				
 				<section>
