@@ -95,8 +95,37 @@
 				{
 					if ($db_connection->query("INSERT INTO users VALUES (NULL, '$login', '$hashed_password', '$email')"))
 					{
-						$_SESSION['register_succed'] = true;
-						header('Location: index.php');
+						if ($id_result = $db_connection->query("SELECT MAX(id) AS id FROM users"))
+						{
+							$id_amount = $id_result->num_rows;
+							
+							if ($id_amount > 0)
+							{
+								$new_user_id = $id_result->fetch_assoc();
+								$id = $new_user_id['id'];
+								
+								if ($db_connection->query("INSERT INTO payment_methods_assigned_to_users (id, user_id, name) SELECT NULL, '$id', name FROM payment_methods_default")
+									&& $db_connection->query("INSERT INTO expenses_category_assigned_to_users (id, user_id, name) SELECT NULL, '$id', name FROM expenses_category_default")
+									&& $db_connection->query("INSERT INTO incomes_category_assigned_to_users (id, user_id, name) SELECT NULL, '$id', name FROM incomes_category_default"))
+									{
+										$_SESSION['register_succed'] = true;
+										header('Location: index.php');
+									}
+									else
+									{
+										throw new Exception($db_connection->error);
+									}
+							}
+							else
+							{
+								throw new Exception("Data base problem. Returned no results");
+							}
+							
+						}
+						else
+						{
+							throw new Exception($db_connection->error);
+						}	
 					}
 					else
 					{
