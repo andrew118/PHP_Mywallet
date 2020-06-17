@@ -47,6 +47,12 @@
 		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 		
 		
+		$_SESSION['regform_login'] = $login;
+		$_SESSION['regform_email'] = $email;
+		$_SESSION['regform_password1'] = $password;
+		$_SESSION['regform_password2'] = $password_compare;
+		
+		
 		require_once "connect.php";
 		mysqli_report(MYSQLI_REPORT_STRICT);
 		
@@ -182,19 +188,43 @@
 							<form method="post">
 								
 								<div class="col-10 offset-1">
-									<input type="text" class="form-control mt-5 mb-3" placeholder="Podaj login" name="login">
+									<input type="text" class="form-control mt-5 mb-3" placeholder="Podaj login" name="login" value="<?php
+										if (isset($_SESSION['regform_login']))
+										{
+											echo $_SESSION['regform_login'];
+											unset($_SESSION['regform_login']);
+										}
+									?>">
 								</div>
 								
 								<div class="col-10 offset-1">
-									<input type="password" class="form-control mb-3" placeholder="Podaj hasło" name="password">
+									<input type="password" class="form-control mb-3" placeholder="Podaj hasło" name="password" value="<?php
+										if (isset($_SESSION['regform_password1']))
+										{
+											echo $_SESSION['regform_password1'];
+											unset($_SESSION['regform_password1']);
+										}
+									?>">
 								</div>
 								
 								<div class="col-10 offset-1">
-									<input type="password" class="form-control mb-3" id="passwordCompare" placeholder="Powtórz hasło" name="passCompare">
+									<input type="password" class="form-control mb-3" id="passwordCompare" placeholder="Powtórz hasło" name="passCompare" value="<?php
+										if (isset($_SESSION['regform_password2']))
+										{
+											echo $_SESSION['regform_password2'];
+											unset($_SESSION['regform_password2']);
+										}
+									?>">
 								</div>
 								
 								<div class="col-10 offset-1">
-									<input type="text" class="form-control mb-4" id="email" placeholder="Podaj e-mail" name="email">
+									<input type="text" class="form-control mb-4" id="email" placeholder="Podaj e-mail" name="email" value="<?php
+										if (isset($_SESSION['regform_email']))
+										{
+											echo $_SESSION['regform_email'];
+											unset($_SESSION['regform_email']);
+										}
+									?>">
 								</div>
 								
 								<div class="col-10 offset-1">
