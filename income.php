@@ -135,6 +135,21 @@
 				<article>
 					<h1 class="h4 mt-4 mb-3 font-weight-bold text-center">Dodaj swoje przychody</h1>
 					
+					<?php
+					
+					if (isset($_SESSION['e_money']))
+					{	
+						echo $_SESSION['e_money'];
+						unset($_SESSION['register_succed']);
+					}
+					else if (isset($_SESSION['e_date']))
+					{
+						echo $_SESSION['e_date'];
+						unset($_SESSION['e_date']);
+					}
+					
+					?>
+					
 					<div class="row mx-2">
 						
 						<div class="col-sm-10 col-md-8 col-lg-6 mx-auto p-3 rounded" style="border: 2px #f2f2f2 dashed">
