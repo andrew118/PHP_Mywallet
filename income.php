@@ -263,7 +263,7 @@
 								</div>
 								
 								<input type="submit" class="btn btn-lg btn-block btn-success mb-4" value="Dodaj">
-								<input type="button" class="btn btn-sm btn-block btn-outline-danger" value="Anuluj">
+								<a href="main.php" class="btn btn-sm btn-block btn-outline-danger">Anuluj</a>
 
 							</form>
 						</div>
