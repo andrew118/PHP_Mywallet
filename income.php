@@ -138,7 +138,7 @@
 					<div class="row mx-2">
 						
 						<div class="col-sm-10 col-md-8 col-lg-6 mx-auto p-3 rounded" style="border: 2px #f2f2f2 dashed">
-							<form action="#">
+							<form action="add-income.php" method="post">
 															
 								<div class="col">
 									<label class="sr-only">Kwota</label>
@@ -146,7 +146,7 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text px-2">Kwota</span>
 											</div>
-											<input type="number" class="form-control" step="0.01" id="money" value="0.00">
+											<input type="number" class="form-control" step="0.01" name="money" value="0.00">
 										</div>
 								</div>
 								
@@ -156,13 +156,13 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text px-3">Data</span>
 											</div>
-											<input type="date" class="form-control" id="dater" value="<?php echo $today; ?>">
+											<input type="date" class="form-control" name="dater" value="<?php echo $today; ?>">
 										</div>
 								</div>
 																
 								<div class="col mt-2 mb-4">
 									<label class="mr-sm-2" for="categoty">Kategoria</label>
-									<select class="custom-select mr-sm-2" id="categoty">
+									<select class="custom-select mr-sm-2" name="category">
 <?php
 	
 	try
@@ -189,7 +189,7 @@
 				{
 					echo "<option value=".$user_categories['id'].">".$user_categories['name']."</option>";
 				}
-				
+				$result->free_result();
 			}
 			else
 			{
@@ -211,12 +211,12 @@
 								
 									<div class="form-group mt-2 mb-4">
 										<label for="comment" class="sr-only">Komentarz</label>
-										<input type="text" class="form-control" id="comment" placeholder="Komentarz (opcjonalnie)" aria-describedby="commentHelp">
+										<input type="text" class="form-control" name="comment" placeholder="Komentarz (opcjonalnie)" aria-describedby="commentHelp">
 										<small id="commentHelp" class="form-text text-warning text-right">Dodatkowy opis, np. sprzedany rower, dywidendy itp.</small>
 									</div>
 								</div>
 								
-								<input type="button" class="btn btn-lg btn-block btn-success mb-4" value="Dodaj">
+								<input type="submit" class="btn btn-lg btn-block btn-success mb-4" value="Dodaj">
 								<input type="button" class="btn btn-sm btn-block btn-outline-danger" value="Anuluj">
 
 							</form>
