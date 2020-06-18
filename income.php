@@ -8,8 +8,31 @@
 		exit();
 	}
 	
-	
 	$today = date('Y-m-d');
+	
+	require_once "connect.php";
+	mysqli_report(MYSQLI_REPORT_STRICT);
+	
+	try
+	{
+		$db_connection = new mysqli($host, $db_user, $db_password, $db_name);
+		
+		if ($db_connection->connect_errno !=0)
+		{
+			throw new Exception(mysqli_connect_errno());
+		}
+		else
+		{
+			echo 'Połączyłem się';
+		}
+		
+		$db_connection->close();
+	}
+	catch(Exception $e)
+	{
+		echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.';
+		echo 'Dev Info: '.$e;
+	}
 
 ?>
 
