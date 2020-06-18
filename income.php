@@ -1,12 +1,7 @@
 <?php
 
-	session_start();
+	$today = date('Y-m-d');
 
-	if (!isset($_SESSION['is_user_logged']))
-	{
-		header('Location: index.php');
-		exit();
-	}
 ?>
 
 <!DOCTYPE html>
@@ -56,12 +51,12 @@
 						
 							<ul class="navbar-nav">
 								
-								<li class="nav-item">
-									<a class="nav-link" href="income.php"><i class="icon-money"></i> Dodaj przychód </a>
+								<li class="nav-item active">
+									<a class="nav-link" href="income.html"><i class="icon-money"></i> Dodaj przychód </a>
 								</li>
 								
 								<li class="nav-item">
-									<a class="nav-link" href="expanse.php"><i class="icon-basket"></i> Dodaj wydatek </a>
+									<a class="nav-link" href="expanse.html"><i class="icon-basket"></i> Dodaj wydatek </a>
 								</li>
 								
 								<li class="nav-item dropdown">
@@ -69,8 +64,8 @@
 									
 									<div class="dropdown-menu wallet" aria-labelledby="submenu">
 										
-										<a class="dropdown-item" href="###"> Bierzący miesiąc </a>
-										<a class="dropdown-item" href="###"> Poprzedni miesiąc </a>
+										<a class="dropdown-item" href="balance.html"> Bierzący miesiąc </a>
+										<a class="dropdown-item" href="balance.html"> Poprzedni miesiąc </a>
 										<button class="dropdown-item btn btn-link"  data-toggle="modal" data-target="#dateRangeModal"> Inny zakres </button>
 										
 									</div>
@@ -78,11 +73,11 @@
 								</li>
 								
 								<li class="nav-item">
-									<a class="nav-link" href="###"><i class="icon-conf"></i> Ustawienia </a>
+									<a class="nav-link" href="settings.html"><i class="icon-conf"></i> Ustawienia </a>
 								</li>
 								
 								<li class="nav-item">
-									<a class="nav-link" href="logout.php"><i class="icon-logout"></i> Wyloguj </a>
+									<a class="nav-link" href="index.html"><i class="icon-logout"></i> Wyloguj </a>
 								</li>
 								
 							</ul>
@@ -93,7 +88,7 @@
 					
 				</header>
 				
-												<!-- MODAL STARTS HERE -->
+								<!-- MODAL STARTS HERE -->
 				<div class="modal fade" id="dateRangeModal" tabindex="-1" role="dialog" aria-labelledby="dateRangeInput" aria-hidden="true">
 					<div class="modal-dialog modal-dialog-centered" role="document">
 						<div class="modal-content">
@@ -126,25 +121,59 @@
 					</div>
 				</div>
 				
-				<section>
-				
-					<div class="row">
-						<div class="col-12 text-center mt-4">
-							
-							<h3 class="h2 mb-4">Witaj <span class="text-capitalize">
-							<?php
-								echo $_SESSION['user'];
-							?>
-							</span>!</h3>
-							<p class="h4">Miło, że tu zajrzałeś</p>
-							<p class="h4 mt-2 mb-4">Dziś <span id="dayOfWeek"></span></p>
-							<img src="img/save.jpg" class="img-thumbnail" alt="Oszczędzaj pieniądze" />
-							<p class="h4 mt-2">Zerknijmy jak mają się Twoje finanse...</p>
-							
+				<article>
+					<h1 class="h4 mt-4 mb-3 font-weight-bold text-center">Dodaj swoje przychody</h1>
+					
+					<div class="row mx-2">
+						
+						<div class="col-sm-10 col-md-8 col-lg-6 mx-auto p-3 rounded" style="border: 2px #f2f2f2 dashed">
+							<form action="#">
+															
+								<div class="col">
+									<label class="sr-only">Kwota</label>
+										<div class="input-group input-group-lg">
+											<div class="input-group-prepend">
+												<span class="input-group-text px-2">Kwota</span>
+											</div>
+											<input type="number" class="form-control" step="0.01" id="money" value="0.00">
+										</div>
+								</div>
+								
+								<div class="col mt-2 mb-4">
+									<label class="sr-only">Data</label>
+										<div class="input-group input-group-lg">
+											<div class="input-group-prepend">
+												<span class="input-group-text px-3">Data</span>
+											</div>
+											<input type="date" class="form-control" id="dater" value="<?php echo $today; ?>">
+										</div>
+								</div>
+																
+								<div class="col mt-2 mb-4">
+									<label class="mr-sm-2" for="categoty">Kategoria</label>
+									<select class="custom-select mr-sm-2" id="categoty">
+										<option value="1">Wynagrodzenie</option>
+										<option value="2">Odsetki bankowe</option>
+										<option value="3">Sprzedaż na allegro</option>
+										<option value="4">Inne</option>
+									</select>
+									
+								
+									<div class="form-group mt-2 mb-4">
+										<label for="comment" class="sr-only">Komentarz</label>
+										<input type="text" class="form-control" id="comment" placeholder="Komentarz (opcjonalnie)" aria-describedby="commentHelp">
+										<small id="commentHelp" class="form-text text-warning text-right">Dodatkowy opis, np. sprzedany rower, dywidendy itp.</small>
+									</div>
+								</div>
+								
+								<input type="button" class="btn btn-lg btn-block btn-success mb-4" value="Dodaj">
+								<input type="button" class="btn btn-sm btn-block btn-outline-danger" value="Anuluj">
+
+							</form>
 						</div>
+						
 					</div>
-				
-				</section>
+				</article>
 				
 				<footer class="fixed-bottom text-center bg-dark text-white-50" style="border-top: 1px #f2f2f2 dashed">
 					Created by &copy; ANDREW
