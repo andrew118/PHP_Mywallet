@@ -1,5 +1,14 @@
 <?php
+	
+	session_start();
 
+	if (!isset($_SESSION['is_user_logged']))
+	{
+		header('Location: index.php');
+		exit();
+	}
+	
+	
 	$today = date('Y-m-d');
 
 ?>
@@ -77,7 +86,7 @@
 								</li>
 								
 								<li class="nav-item">
-									<a class="nav-link" href="index.html"><i class="icon-logout"></i> Wyloguj </a>
+									<a class="nav-link" href="logout.php"><i class="icon-logout"></i> Wyloguj </a>
 								</li>
 								
 							</ul>
