@@ -12,27 +12,6 @@
 	
 	require_once "connect.php";
 	mysqli_report(MYSQLI_REPORT_STRICT);
-	
-	try
-	{
-		$db_connection = new mysqli($host, $db_user, $db_password, $db_name);
-		
-		if ($db_connection->connect_errno !=0)
-		{
-			throw new Exception(mysqli_connect_errno());
-		}
-		else
-		{
-			echo 'Połączyłem się';
-		}
-		
-		$db_connection->close();
-	}
-	catch(Exception $e)
-	{
-		echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.';
-		echo 'Dev Info: '.$e;
-	}
 
 ?>
 
@@ -84,11 +63,11 @@
 							<ul class="navbar-nav">
 								
 								<li class="nav-item active">
-									<a class="nav-link" href="income.html"><i class="icon-money"></i> Dodaj przychód </a>
+									<a class="nav-link" href="income.php"><i class="icon-money"></i> Dodaj przychód </a>
 								</li>
 								
 								<li class="nav-item">
-									<a class="nav-link" href="expanse.html"><i class="icon-basket"></i> Dodaj wydatek </a>
+									<a class="nav-link" href="expanse.php"><i class="icon-basket"></i> Dodaj wydatek </a>
 								</li>
 								
 								<li class="nav-item dropdown">
@@ -96,8 +75,8 @@
 									
 									<div class="dropdown-menu wallet" aria-labelledby="submenu">
 										
-										<a class="dropdown-item" href="balance.html"> Bierzący miesiąc </a>
-										<a class="dropdown-item" href="balance.html"> Poprzedni miesiąc </a>
+										<a class="dropdown-item" href="balance.php"> Bierzący miesiąc </a>
+										<a class="dropdown-item" href="balance.php"> Poprzedni miesiąc </a>
 										<button class="dropdown-item btn btn-link"  data-toggle="modal" data-target="#dateRangeModal"> Inny zakres </button>
 										
 									</div>
@@ -105,7 +84,7 @@
 								</li>
 								
 								<li class="nav-item">
-									<a class="nav-link" href="settings.html"><i class="icon-conf"></i> Ustawienia </a>
+									<a class="nav-link" href="settings.php"><i class="icon-conf"></i> Ustawienia </a>
 								</li>
 								
 								<li class="nav-item">
@@ -184,10 +163,49 @@
 								<div class="col mt-2 mb-4">
 									<label class="mr-sm-2" for="categoty">Kategoria</label>
 									<select class="custom-select mr-sm-2" id="categoty">
-										<option value="1">Wynagrodzenie</option>
-										<option value="2">Odsetki bankowe</option>
-										<option value="3">Sprzedaż na allegro</option>
-										<option value="4">Inne</option>
+<?php
+	
+	try
+	{
+		$db_connection = new mysqli($host, $db_user, $db_password, $db_name);
+		
+		if ($db_connection->connect_errno !=0)
+		{
+			throw new Exception(mysqli_connect_errno());
+		}
+		else
+		{
+			$id = $_SESSION['logged_user_id'];
+			$result = $db_connection->query("SELECT id, name FROM incomes_category_assigned_to_users WHERE user_id = '$id'");
+			
+			if (!$result)
+				throw new Exception($db_connection->error);
+			
+			$categories_count = $result->num_rows;
+			$_SESSION['categories_count'] = $categories_count;
+			if ($categories_count > 0)
+			{
+				while($user_categories = $result->fetch_assoc())
+				{
+					echo "<option value=".$user_categories['id'].">".$user_categories['name']."</option>";
+				}
+				
+			}
+			else
+			{
+				throw new Exception($db_connection->error);
+			}
+		}
+		
+		$db_connection->close();
+	}
+	catch(Exception $e)
+	{
+		echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.';
+		echo 'Dev Info: '.$e;
+	}
+
+?>
 									</select>
 									
 								
