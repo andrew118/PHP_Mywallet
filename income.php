@@ -140,12 +140,17 @@
 					if (isset($_SESSION['e_money']))
 					{	
 						echo $_SESSION['e_money'];
-						unset($_SESSION['register_succed']);
+						unset($_SESSION['e_money']);
 					}
 					else if (isset($_SESSION['e_date']))
 					{
 						echo $_SESSION['e_date'];
 						unset($_SESSION['e_date']);
+					}
+					else if (isset($_SESSION['income_succed']))
+					{
+						echo $_SESSION['income_succed'];
+						unset($_SESSION['income_succed']);
 					}
 					
 					?>
@@ -224,7 +229,7 @@
 				{
 					echo "<option value=".$user_categories['id'].">".$user_categories['name']."</option>";
 				}
-				$result->free_result();
+				$result->free();
 			}
 			else
 			{
