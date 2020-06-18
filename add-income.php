@@ -3,12 +3,12 @@
 	session_start();
 	require_once "connect.php";
 	
-/*
-	echo $_POST['money'].'<br>';
-	echo $_POST['dater'].'<br>';
-	echo $_POST['category'].'<br>';
-	echo $_POST['comment'].'<br>';
-*/
+
+	$_SESSION['in_money'] = $_POST['money'];
+	$_SESSION['in_dater'] = $_POST['dater'];
+	$_SESSION['in_category'] = $_POST['category'];
+	$_SESSION['in_comment'] = $_POST['comment'];
+	
 	$form_valid = true;
 	
 	if ($_POST['money'] <= 0)
