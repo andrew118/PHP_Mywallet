@@ -29,8 +29,6 @@
 		<link rel="stylesheet" href="css/fontello.css" type="text/css">
 		<link rel="stylesheet" href="style.css" type="text/css">
 		
-		<script src="flow.js"></script>
-		
     <title>MyWallet | Weź w garść swoje pieniądze już dziś</title>
 		
   </head>
@@ -155,7 +153,7 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text px-3">Data</span>
 											</div>
-											<input type="date" class="form-control" name="dater" value="">
+											<input type="date" class="form-control" name="dater" value="<?php echo $today; ?>">
 										</div>
 								</div>
 								
