@@ -62,11 +62,11 @@
 							<ul class="navbar-nav">
 								
 								<li class="nav-item">
-									<a class="nav-link" href="income.html"><i class="icon-money"></i> Dodaj przychód </a>
+									<a class="nav-link" href="income.php"><i class="icon-money"></i> Dodaj przychód </a>
 								</li>
 								
 								<li class="nav-item active">
-									<a class="nav-link" href="expanse.html"><i class="icon-basket"></i> Dodaj wydatek </a>
+									<a class="nav-link" href="expanse.php"><i class="icon-basket"></i> Dodaj wydatek </a>
 								</li>
 								
 								<li class="nav-item dropdown">
@@ -74,8 +74,8 @@
 									
 									<div class="dropdown-menu wallet" aria-labelledby="submenu">
 										
-										<a class="dropdown-item" href="balance.html"> Bierzący miesiąc </a>
-										<a class="dropdown-item" href="balance.html"> Poprzedni miesiąc </a>
+										<a class="dropdown-item" href="balance.php"> Bierzący miesiąc </a>
+										<a class="dropdown-item" href="balance.php"> Poprzedni miesiąc </a>
 										<button class="dropdown-item btn btn-link"  data-toggle="modal" data-target="#dateRangeModal"> Inny zakres </button>
 										
 									</div>
@@ -83,11 +83,11 @@
 								</li>
 								
 								<li class="nav-item">
-									<a class="nav-link" href="settings.html"><i class="icon-conf"></i> Ustawienia </a>
+									<a class="nav-link" href="settings.php"><i class="icon-conf"></i> Ustawienia </a>
 								</li>
 								
 								<li class="nav-item">
-									<a class="nav-link" href="index.html"><i class="icon-logout"></i> Wyloguj </a>
+									<a class="nav-link" href="index.php"><i class="icon-logout"></i> Wyloguj </a>
 								</li>
 								
 							</ul>
@@ -145,7 +145,7 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text px-2">Kwota</span>
 											</div>
-											<input type="number" class="form-control" step="0.01" id="money" value="0.00">
+											<input type="number" class="form-control" step="0.01" name="money" value="0.00">
 										</div>
 								</div>
 								
@@ -155,13 +155,13 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text px-3">Data</span>
 											</div>
-											<input type="date" class="form-control" id="dater" value="">
+											<input type="date" class="form-control" name="dater" value="">
 										</div>
 								</div>
 								
 								<div class="col mt-2 mb-4">
 									<label class="mr-sm-2" for="paymentMethod">Metoda płatności</label>
-										<select class="custom-select mr-sm-2" id="paymentMethod">
+										<select class="custom-select mr-sm-2" name="paymentMethod">
 											<option value="0">Gotówka</option>
 											<option value="1" selected>Karta debetowa</option>
 											<option value="2">Karta kredytowa</option>
@@ -170,7 +170,7 @@
 																
 								<div class="col mt-2 mb-4">
 									<label class="mr-sm-2" for="categotyExpanse">Kategoria</label>
-									<select class="custom-select mr-sm-2" id="categotyExpanse">
+									<select class="custom-select mr-sm-2" name="categotyExpanse">
 										<option value="0">Jedzenie</option>
 										<option value="1">Mieszkanie</option>
 										<option value="2">Transport</option>
@@ -193,13 +193,13 @@
 								
 									<div class="form-group mt-2 mb-4">
 										<label for="comment" class="sr-only">Komentarz</label>
-										<input type="text" class="form-control" id="comment" placeholder="Komentarz (opcjonalnie)" aria-describedby="commentHelp">
+										<input type="text" class="form-control" name="comment" placeholder="Komentarz (opcjonalnie)" aria-describedby="commentHelp">
 										<small id="commentHelp" class="form-text text-warning text-right">Dodatkowy opis, np. weekend w górach, obiad na mieście itp.</small>
 									</div>
 								</div>
 								
 								<input type="button" class="btn btn-lg btn-block btn-success mb-4" value="Dodaj">
-								<input type="button" class="btn btn-sm btn-block btn-outline-danger" value="Anuluj">
+								<a href="main.php" class="btn btn-sm btn-block btn-outline-danger">Anuluj</a>
 
 							</form>
 						</div>
