@@ -193,13 +193,7 @@
 																
 								<div class="col mt-2 mb-4">
 									<label class="mr-sm-2" for="categoty">Kategoria</label>
-									<select class="custom-select mr-sm-2" name="category" value="<?php
-											if (isset($_SESSION['in_category']))
-											{
-												echo $_SESSION['in_category'];
-												unset($_SESSION['in_category']);
-											}
-											?>">
+									<select class="custom-select mr-sm-2" name="category">
 											
 <?php
 	
@@ -228,6 +222,11 @@
 			{
 				while($user_categories = $result->fetch_assoc())
 				{
+					if (isset($_SESSION['in_category']) && ($_SESSION['in_category'] == $user_categories['id']))
+					{
+						echo "<option value=".$user_categories['id']." selected>".$user_categories['name']."</option>";
+						unset($_SESSION['in_category']);
+					}
 					echo "<option value=".$user_categories['id'].">".$user_categories['name']."</option>";
 				}
 				$result->free();
