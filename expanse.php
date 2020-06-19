@@ -156,14 +156,62 @@
 											<input type="date" class="form-control" name="dater" value="<?php echo $today; ?>">
 										</div>
 								</div>
-								
-								<div class="col mt-2 mb-4">
-									<label class="mr-sm-2" for="paymentMethod">Metoda płatności</label>
-										<select class="custom-select mr-sm-2" name="paymentMethod">
-											<option value="0">Gotówka</option>
-											<option value="1" selected>Karta debetowa</option>
-											<option value="2">Karta kredytowa</option>
-										</select>
+
+<?php
+
+	require_once "connect.php";
+	mysqli_report(MYSQLI_REPORT_STRICT);
+	
+	try
+	{
+		$db_connection = new mysqli($host, $db_user, $db_password, $db_name);
+		
+		if ($db_connection->connect_errno !=0)
+		{
+			throw new Exception(mysqli_connect_errno());
+		}
+		else
+		{
+			$id = $_SESSION['logged_user_id'];
+			$result = $db_connection->query("SELECT id, name FROM payment_methods_assigned_to_users WHERE user_id = '$id'");
+			
+			if (!$result)
+				throw new Exception($db_connection->error);
+			
+			$categories_count = $result->num_rows;
+
+			if ($categories_count > 0)
+			{
+				echo '<div class="col mt-2 mb-4">';
+				echo '<label class="mr-sm-2" for="paymentMethod">Metoda płatności</label>';
+				echo '<select class="custom-select mr-sm-2" name="paymentMethod">';
+				
+				while($user_categories = $result->fetch_assoc())
+				{
+					echo "<option value=".$user_categories['id'].">".$user_categories['name']."</option>";
+				}
+				echo '</select>';
+				
+				$result->free();
+			}
+			else
+			{
+				throw new Exception($db_connection->error);
+			}
+			
+			
+		}
+		
+		$db_connection->close();
+	}
+	catch(Exception $e)
+	{
+		echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.';
+		echo 'Dev Info: '.$e;
+	}
+
+?>
+										
 								</div>
 																
 								<div class="col mt-2 mb-4">
