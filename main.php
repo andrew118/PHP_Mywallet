@@ -62,7 +62,7 @@
 								</li>
 								
 								<li class="nav-item">
-									<a class="nav-link" href="expanse.php"><i class="icon-basket"></i> Dodaj wydatek </a>
+									<a class="nav-link" href="expense.php"><i class="icon-basket"></i> Dodaj wydatek </a>
 								</li>
 								
 								<li class="nav-item dropdown">
