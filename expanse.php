@@ -190,7 +190,7 @@
 				{
 					echo "<option value=".$user_categories['id'].">".$user_categories['name']."</option>";
 				}
-				echo '</select>';
+				echo '</select></div>';
 				
 				$result->free();
 			}
@@ -199,6 +199,31 @@
 				throw new Exception($db_connection->error);
 			}
 			
+			$result = $db_connection->query("SELECT id, name FROM expenses_category_assigned_to_users WHERE user_id = '$id'");
+			
+			if (!$result)
+				throw new Exception($db_connection->error);
+			
+			$categories_count = $result->num_rows;
+
+			if ($categories_count > 0)
+			{
+				echo '<div class="col mt-2 mb-4">';
+				echo '<label class="mr-sm-2" for="categotyExpanse">Kategoria</label>';
+				echo '<select class="custom-select mr-sm-2" name="categotyExpanse">';
+				
+				while($user_categories = $result->fetch_assoc())
+				{
+					echo "<option value=".$user_categories['id'].">".$user_categories['name']."</option>";
+				}
+				echo '</select>';
+				
+				$result->free();
+			}
+			else
+			{
+				throw new Exception($db_connection->error);
+			}
 			
 		}
 		
@@ -210,32 +235,7 @@
 		echo 'Dev Info: '.$e;
 	}
 
-?>
-										
-								</div>
-																
-								<div class="col mt-2 mb-4">
-									<label class="mr-sm-2" for="categotyExpanse">Kategoria</label>
-									<select class="custom-select mr-sm-2" name="categotyExpanse">
-										<option value="0">Jedzenie</option>
-										<option value="1">Mieszkanie</option>
-										<option value="2">Transport</option>
-										<option value="3">Telekomunikacja</option>
-										<option value="4">Ochrona zdrowia</option>
-										<option value="5">Odzież</option>
-										<option value="6">Higiena</option>
-										<option value="7">Dzieci</option>
-										<option value="8">Rozrywka</option>
-										<option value="9">Wycieczka</option>
-										<option value="10">Szkolenia</option>
-										<option value="11">Książki</option>
-										<option value="12">Oszczędności</option>
-										<option value="13">Emerytura</option>
-										<option value="14">Spłata długów</option>
-										<option value="15">Darowizna</option>
-										<option value="15">Inne</option>
-									</select>
-									
+?>		
 								
 									<div class="form-group mt-2 mb-4">
 										<label for="comment" class="sr-only">Komentarz</label>
