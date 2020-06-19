@@ -132,10 +132,30 @@
 				<article>
 					<h1 class="h4 mt-4 mb-3 font-weight-bold text-center">Dodaj swoje wydatki</h1>
 					
+					<?php
+					
+					if (isset($_SESSION['e_money']))
+					{	
+						echo $_SESSION['e_money'];
+						unset($_SESSION['e_money']);
+					}
+					else if (isset($_SESSION['e_date']))
+					{
+						echo $_SESSION['e_date'];
+						unset($_SESSION['e_date']);
+					}
+					else if (isset($_SESSION['income_succed']))
+					{
+						echo $_SESSION['income_succed'];
+						unset($_SESSION['income_succed']);
+					}
+					
+					?>
+					
 					<div class="row mx-2">
 						
 						<div class="col-sm-10 col-md-8 col-lg-6 mx-auto p-3 rounded" style="border: 2px #f2f2f2 dashed">
-							<form action="add-expense" method="post">
+							<form action="add-expense.php" method="post">
 															
 								<div class="col">
 									<label class="sr-only">Kwota</label>
@@ -143,7 +163,14 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text px-2">Kwota</span>
 											</div>
-											<input type="number" class="form-control" step="0.01" name="money" value="0.00">
+											<input type="number" class="form-control" step="0.01" name="money" value="<?php
+											if (isset($_SESSION['ex_money']))
+											{
+												echo $_SESSION['ex_money'];
+												unset($_SESSION['ex_money']);
+											}
+											else	
+												echo "0.00"; ?>">
 										</div>
 								</div>
 								
@@ -153,7 +180,14 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text px-3">Data</span>
 											</div>
-											<input type="date" class="form-control" name="dater" value="<?php echo $today; ?>">
+											<input type="date" class="form-control" name="dater" value="<?php
+											if (isset($_SESSION['ex_dater']))
+											{
+												echo $_SESSION['ex_dater'];
+												unset($_SESSION['ex_dater']);
+											}
+											else	
+												echo $today; ?>">
 										</div>
 								</div>
 
@@ -183,8 +217,14 @@
 			if ($categories_count > 0)
 			{
 				echo '<div class="col mt-2 mb-4">';
-				echo '<label class="mr-sm-2" for="paymentMethod">Metoda płatności</label>';
-				echo '<select class="custom-select mr-sm-2" name="paymentMethod">';
+				echo '<label class="mr-sm-2" for="payment">Metoda płatności</label>';
+				if (isset($_SESSION['ex_payment']))
+				{
+					echo '<select class="custom-select mr-sm-2" name="paymentMethod" value="'.$_SESSION['in_category'].'">';
+					unset($_SESSION['ex_payment']);
+				}
+				else
+					echo '<select class="custom-select mr-sm-2" name="paymentMethod">';
 				
 				while($user_categories = $result->fetch_assoc())
 				{
@@ -209,8 +249,14 @@
 			if ($categories_count > 0)
 			{
 				echo '<div class="col mt-2 mb-4">';
-				echo '<label class="mr-sm-2" for="categotyExpanse">Kategoria</label>';
-				echo '<select class="custom-select mr-sm-2" name="categotyExpanse">';
+				echo '<label class="mr-sm-2" for="category">Kategoria</label>';
+				if (isset($_SESSION['ex_category']))
+				{
+					echo '<select class="custom-select mr-sm-2" name="category" value="'.$_SESSION['ex_category'].'">';
+					unset($_SESSION['ex_category']);
+				}
+				else
+					echo '<select class="custom-select mr-sm-2" name="category">';
 				
 				while($user_categories = $result->fetch_assoc())
 				{
@@ -244,7 +290,7 @@
 									</div>
 								</div>
 								
-								<input type="button" class="btn btn-lg btn-block btn-success mb-4" value="Dodaj">
+								<input type="submit" class="btn btn-lg btn-block btn-success mb-4" value="Dodaj">
 								<a href="main.php" class="btn btn-sm btn-block btn-outline-danger">Anuluj</a>
 
 							</form>

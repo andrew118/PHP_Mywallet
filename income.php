@@ -144,10 +144,10 @@
 						echo $_SESSION['e_date'];
 						unset($_SESSION['e_date']);
 					}
-					else if (isset($_SESSION['income_succed']))
+					else if (isset($_SESSION['expense_succed']))
 					{
-						echo $_SESSION['income_succed'];
-						unset($_SESSION['income_succed']);
+						echo $_SESSION['expense_succed'];
+						unset($_SESSION['expense_succed']);
 					}
 					
 					?>
