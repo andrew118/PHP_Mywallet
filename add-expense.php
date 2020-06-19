@@ -69,7 +69,7 @@
 					unset($_SESSION['ex_category']);
 					unset($_SESSION['ex_comment']);
 					
-					header('Location: expense.php');
+					header('Location: expanse.php');
 				}
 				else
 				{

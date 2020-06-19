@@ -85,7 +85,7 @@
 								</li>
 								
 								<li class="nav-item">
-									<a class="nav-link" href="index.php"><i class="icon-logout"></i> Wyloguj </a>
+									<a class="nav-link" href="logout.php"><i class="icon-logout"></i> Wyloguj </a>
 								</li>
 								
 							</ul>
@@ -144,10 +144,10 @@
 						echo $_SESSION['e_date'];
 						unset($_SESSION['e_date']);
 					}
-					else if (isset($_SESSION['income_succed']))
+					else if (isset($_SESSION['expense_succed']))
 					{
-						echo $_SESSION['income_succed'];
-						unset($_SESSION['income_succed']);
+						echo $_SESSION['expense_succed'];
+						unset($_SESSION['expense_succed']);
 					}
 					
 					?>
@@ -190,6 +190,11 @@
 												echo $today; ?>">
 										</div>
 								</div>
+								
+								<div class="col mt-2 mb-4">
+								<label class="mr-sm-2" for="payment">Metoda płatności</label>
+								<select class="custom-select mr-sm-2" name="payment"">
+								
 
 <?php
 
@@ -216,21 +221,18 @@
 
 			if ($categories_count > 0)
 			{
-				echo '<div class="col mt-2 mb-4">';
-				echo '<label class="mr-sm-2" for="payment">Metoda płatności</label>';
-				if (isset($_SESSION['ex_payment']))
-				{
-					echo '<select class="custom-select mr-sm-2" name="paymentMethod" value="'.$_SESSION['in_category'].'">';
-					unset($_SESSION['ex_payment']);
-				}
-				else
-					echo '<select class="custom-select mr-sm-2" name="paymentMethod">';
 				
 				while($user_categories = $result->fetch_assoc())
 				{
-					echo "<option value=".$user_categories['id'].">".$user_categories['name']."</option>";
+					if (isset($_SESSION['ex_payment']) && ($_SESSION['ex_payment'] == $user_categories['id']))
+					{
+						echo "<option value=".$user_categories['id']." selected>".$user_categories['name']."</option>";
+						unset($_SESSION['ex_payment']);
+					}
+					else
+						echo "<option value=".$user_categories['id'].">".$user_categories['name']."</option>";
 				}
-				echo '</select></div>';
+				
 				
 				$result->free();
 			}
@@ -238,7 +240,21 @@
 			{
 				throw new Exception($db_connection->error);
 			}
-			
+?>
+								
+								</select></div>
+								
+								<div class="col mt-2 mb-4">
+								<label class="mr-sm-2" for="category">Kategoria</label>
+								<select class="custom-select mr-sm-2" name="category" value="<?php
+									if (isset($_SESSION['ex_category']))
+									{
+										echo $_SESSION['ex_category'];
+										unset($_SESSION['ex_category']);
+									}
+								?>">
+								
+<?php
 			$result = $db_connection->query("SELECT id, name FROM expenses_category_assigned_to_users WHERE user_id = '$id'");
 			
 			if (!$result)
@@ -248,21 +264,16 @@
 
 			if ($categories_count > 0)
 			{
-				echo '<div class="col mt-2 mb-4">';
-				echo '<label class="mr-sm-2" for="category">Kategoria</label>';
-				if (isset($_SESSION['ex_category']))
-				{
-					echo '<select class="custom-select mr-sm-2" name="category" value="'.$_SESSION['ex_category'].'">';
-					unset($_SESSION['ex_category']);
-				}
-				else
-					echo '<select class="custom-select mr-sm-2" name="category">';
-				
 				while($user_categories = $result->fetch_assoc())
 				{
-					echo "<option value=".$user_categories['id'].">".$user_categories['name']."</option>";
+					if (isset($_SESSION['ex_payment']) && ($_SESSION['ex_category'] == $user_categories['id']))
+					{
+						echo "<option value=".$user_categories['id']." selected>".$user_categories['name']."</option>";
+						unset($_SESSION['ex_payment']);
+					}
+					else
+						echo "<option value=".$user_categories['id'].">".$user_categories['name']."</option>";
 				}
-				echo '</select>';
 				
 				$result->free();
 			}
@@ -282,10 +293,18 @@
 	}
 
 ?>		
+									</select>
 								
 									<div class="form-group mt-2 mb-4">
 										<label for="comment" class="sr-only">Komentarz</label>
-										<input type="text" class="form-control" name="comment" placeholder="Komentarz (opcjonalnie)" aria-describedby="commentHelp">
+										<input type="text" class="form-control" name="comment" placeholder="Komentarz (opcjonalnie)" aria-describedby="commentHelp" value="<?php
+											if (isset($_SESSION['ex_comment']))
+											{
+												echo $_SESSION['ex_comment'];
+												unset($_SESSION['ex_comment']);
+											}
+										
+										?>">
 										<small id="commentHelp" class="form-text text-warning text-right">Dodatkowy opis, np. weekend w górach, obiad na mieście itp.</small>
 									</div>
 								</div>
