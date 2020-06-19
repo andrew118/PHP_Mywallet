@@ -21,7 +21,7 @@
 		$_SESSION['e_money'] = '<div class="alert alert-danger col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" role="alert">Niepoprawna kwota. Poprawny format to np. 123,45</div>';
 		
 		$form_valid = false;
-		header('Location: expanse.php');
+		header('Location: expaese.php');
 	}
 	
 	$separated_date = explode("-", $_POST['dater']);
@@ -30,7 +30,7 @@
 		$_SESSION['e_date'] = '<div class="alert alert-danger col-10 col-sm-8 col-md-6 col-lg-4 mx-auto text-center" role="alert">Niepoprawna data</div>';
 		
 		$form_valid = false;
-		header('Location: expanse.php');
+		header('Location: expense.php');
 	}
 	
 	require_once "connect.php";
@@ -69,7 +69,7 @@
 					unset($_SESSION['ex_category']);
 					unset($_SESSION['ex_comment']);
 					
-					header('Location: expanse.php');
+					header('Location: expense.php');
 				}
 				else
 				{
