@@ -9,9 +9,6 @@
 	}
 	
 	$today = date('Y-m-d');
-	
-	require_once "connect.php";
-	mysqli_report(MYSQLI_REPORT_STRICT);
 
 ?>
 
@@ -203,7 +200,11 @@
 												unset($_SESSION['in_category']);
 											}
 											?>">
+											
 <?php
+	
+	require_once "connect.php";
+	mysqli_report(MYSQLI_REPORT_STRICT);
 	
 	try
 	{
@@ -222,7 +223,7 @@
 				throw new Exception($db_connection->error);
 			
 			$categories_count = $result->num_rows;
-			$_SESSION['categories_count'] = $categories_count;
+
 			if ($categories_count > 0)
 			{
 				while($user_categories = $result->fetch_assoc())

@@ -72,11 +72,11 @@
 							<form action="login.php" method="post">
 								
 								<div class="col-10 offset-1 mt-5">
-									<input type="text" class="form-control mb-3" id="login" placeholder="Podaj login" name="login">
+									<input type="text" class="form-control mb-3" placeholder="Podaj login" name="login">
 								</div>
 								
 								<div class="col-10 offset-1">
-									<input type="password" class="form-control mb-4" id="passWord" placeholder="Podaj hasło" name="password">
+									<input type="password" class="form-control mb-4" placeholder="Podaj hasło" name="password">
 								</div>
 								
 								<div class="col-10 offset-1">

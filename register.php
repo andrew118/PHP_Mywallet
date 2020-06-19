@@ -111,16 +111,17 @@
 										$_SESSION['register_succed'] = true;
 										header('Location: index.php');
 									}
-									else
-									{
-										throw new Exception($db_connection->error);
-									}
+								else
+								{
+									throw new Exception($db_connection->error);
+								}
 							}
 							else
 							{
-								throw new Exception("Data base problem. Returned no results");
+								throw new Exception("Data base problem. Returned 0 results");
 							}
 							
+							$id_result->free();
 						}
 						else
 						{
