@@ -120,7 +120,7 @@
 							{
 								throw new Exception("Data base problem. Returned no results");
 							}
-							
+							$id_result->free();
 						}
 						else
 						{
