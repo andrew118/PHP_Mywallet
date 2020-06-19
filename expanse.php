@@ -135,7 +135,7 @@
 					<div class="row mx-2">
 						
 						<div class="col-sm-10 col-md-8 col-lg-6 mx-auto p-3 rounded" style="border: 2px #f2f2f2 dashed">
-							<form action="#">
+							<form action="add-expense" method="post">
 															
 								<div class="col">
 									<label class="sr-only">Kwota</label>
