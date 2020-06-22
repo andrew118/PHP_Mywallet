@@ -337,36 +337,78 @@ END;
 		echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.<br>';
 		echo 'Dev Info: '.$e;
 	}
-print_r($chart_data);
+
 ?>
 					
 							
 						</div>
 						
 					</div>
-					
+							
 					<canvas id="myChart"></canvas>
 					
 					<script>
-						var context = document.getElementById('myChart').getContext('2d');
+					// Helpful website: www.chartjs.org
+						var context = document.getElementById('myChart');
 						var chart = new Chart(context, {
 							// The type of chart we want to create
-							type: 'doughnut',
+							type: "doughnut",
 
 							// The data for our dataset
 							data: {
-								labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+								labels: [<?php
+									for($i = 0, $size = count($chart_data); $i < $size; $i += 2)
+									{
+										if ($i == 0)
+											echo '"'.$chart_data[$i].'"';
+										else
+											echo ', "'.$chart_data[$i].'"';
+									}
+								?>],
+								backgroundColor: "rgb(0, 0, 0)",						
 								datasets: [{
-									label: 'My First dataset',
-									backgroundColor: 'rgb(255, 99, 132)',
-									borderColor: 'rgb(255, 99, 132)',
-									data: [0, 10, 5, 2, 20, 30, 45]
+									label: "Wydatki",
+									data: [<?php
+									for($i = 1, $size = count($chart_data); $i < $size; $i += 2)
+									{
+										if ($i == 1)
+											echo '"'.$chart_data[$i].'"';
+										else
+											echo ', "'.$chart_data[$i].'"';
+									}
+									?>],
+									backgroundColor: [<?php for($i = 1, $size = count($chart_data); $i < $size; $i += 2)
+									{
+										$r = rand(0, 255);
+										$g = rand(0, 255);
+										$b = rand(0, 255);
+										
+										if ($i == 1)
+											echo '"rgb('.$r.', '.$g.', '.$b.')"';
+										else
+											echo ', "rgb('.$r.', '.$g.', '.$b.')"';
+									}
+									
+									?>],
+									borderColor: "rgb(230, 230, 230)",
 								}]
 							},
 
-							// Configuration options go here
-							options: {}
+							options: {
+								legend: {
+									labels: {
+										fontColor: "rgb(242, 242, 242)",
+										fontSize: 16,
+									}
+								},
+								layout: {
+									padding: {
+										top: 10
+									}
+								}
+							}
 						});
+						
 					</script>
 					
 				</article>
