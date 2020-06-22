@@ -8,7 +8,30 @@
 		exit();
 	}
 	
-	$today = date('Y-m-d');
+	$begin_date = new DateTime();
+	$end_date = new DateTime();
+	
+	if (isset($_POST['current']))
+	{
+		$GLOBALS['begin_date']->modify('first day of this month');
+		$GLOBALS['end_date']->modify('last day of this month');
+		unset($_POST['current']);
+	}
+	
+	if (isset($_POST['previous']))
+	{
+		$GLOBALS['begin_date']->modify('first day of previous month');
+		$GLOBALS['end_date']->modify('last day of previous month');
+		unset($_POST['previous']);
+	}
+
+	if (isset($_POST['begin_date']) && isset($_POST['end_date']))
+	{
+		$GLOBALS['begin_date'] = date_create_from_format('Y-m-d', $_POST['begin_date']);
+		$GLOBALS['end_date'] = date_create_from_format('Y-m-d', $_POST['end_date']);
+		unset($_POST['begin_date']);
+		unset($_POST['end_date']);
+	}
 
 ?>
 
@@ -63,11 +86,11 @@
 									<a class="nav-link" href="income.php"><i class="icon-money"></i> Dodaj przychód </a>
 								</li>
 								
-								<li class="nav-item active">
-									<a class="nav-link" href="expanse.php"><i class="icon-basket"></i> Dodaj wydatek </a>
+								<li class="nav-item">
+									<a class="nav-link" href="expense.php"><i class="icon-basket"></i> Dodaj wydatek </a>
 								</li>
 								
-								<li class="nav-item dropdown">
+								<li class="nav-item dropdown active">
 									<a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false" id="submenu" aria-haspopup="true"><i class="icon-calendar"></i> Przeglądaj bilans </a>
 									
 									<div class="dropdown-menu wallet" aria-labelledby="submenu">
@@ -97,7 +120,7 @@
 					
 				</header>
 				
-								<!-- MODAL STARTS HERE -->
+												<!-- MODAL STARTS HERE -->
 				<div class="modal fade" id="dateRangeModal" tabindex="-1" role="dialog" aria-labelledby="dateRangeInput" aria-hidden="true">
 					<div class="modal-dialog modal-dialog-centered" role="document">
 						<div class="modal-content">
@@ -132,75 +155,35 @@
 							</form>
 						</div>
 					</div>
-				</div>				
+				</div>
 				
 				<article>
-					<h1 class="h4 mt-4 mb-3 font-weight-bold text-center">Dodaj swoje wydatki</h1>
-					
-					<?php
-					
-					if (isset($_SESSION['e_money']))
-					{	
-						echo $_SESSION['e_money'];
-						unset($_SESSION['e_money']);
-					}
-					else if (isset($_SESSION['e_date']))
-					{
-						echo $_SESSION['e_date'];
-						unset($_SESSION['e_date']);
-					}
-					else if (isset($_SESSION['expense_succed']))
-					{
-						echo $_SESSION['expense_succed'];
-						unset($_SESSION['expense_succed']);
-					}
-					
-					?>
+					<h1 class="h4 mt-4 mb-3 font-weight-bold text-center">Sprawdź bilans w wybranym okresie czasu</h1>
 					
 					<div class="row mx-2">
 						
-						<div class="col-sm-10 col-md-8 col-lg-6 mx-auto p-3 rounded" style="border: 2px #f2f2f2 dashed">
-							<form action="add-expense.php" method="post">
-															
-								<div class="col">
-									<label class="sr-only">Kwota</label>
+						<div class="col-12 p-3 rounded" style="border: 2px #f2f2f2 dashed">
+							<div class="row">
+								<div class="col mt-2 mb-4">
+									<label class="sr-only">Data początkowa</label>
 										<div class="input-group input-group-lg">
 											<div class="input-group-prepend">
-												<span class="input-group-text px-2">Kwota</span>
+												<span class="input-group-text px-3">Początek</span>
 											</div>
-											<input type="number" class="form-control" step="0.01" name="money" value="<?php
-											if (isset($_SESSION['ex_money']))
-											{
-												echo $_SESSION['ex_money'];
-												unset($_SESSION['ex_money']);
-											}
-											else	
-												echo "0.00"; ?>">
+											<input type="date" class="form-control" id="daterBegin" value="<?php echo $begin_date->format('Y-m-d'); ?>">
 										</div>
 								</div>
 								
 								<div class="col mt-2 mb-4">
-									<label class="sr-only">Data</label>
+									<label class="sr-only">Data końcowa</label>
 										<div class="input-group input-group-lg">
 											<div class="input-group-prepend">
-												<span class="input-group-text px-3">Data</span>
+												<span class="input-group-text px-3">Koniec</span>
 											</div>
-											<input type="date" class="form-control" name="dater" value="<?php
-											if (isset($_SESSION['ex_dater']))
-											{
-												echo $_SESSION['ex_dater'];
-												unset($_SESSION['ex_dater']);
-											}
-											else	
-												echo $today; ?>">
+											<input type="date" class="form-control" id="daterEnd" value="<?php echo $end_date->format('Y-m-d'); ?>">
 										</div>
 								</div>
-								
-								<div class="col mt-2 mb-4">
-								<label class="mr-sm-2" for="payment">Metoda płatności</label>
-								<select class="custom-select mr-sm-2" name="payment"">
-								
-
+							</div>
 <?php
 
 	require_once "connect.php";
@@ -217,110 +200,142 @@
 		else
 		{
 			$id = $_SESSION['logged_user_id'];
-			$result = $db_connection->query("SELECT id, name FROM payment_methods_assigned_to_users WHERE user_id = '$id'");
+			$begin = $begin_date->format('Y-m-d');
+			$end = $end_date->format('Y-m-d');
 			
-			if (!$result)
+			// balance = incomes - expenses
+			$result_income_amount = $db_connection->query("SELECT SUM(amount) AS summary FROM incomes WHERE user_id = '$id' AND date_of_income BETWEEN '$begin' AND '$end'");
+			
+			$result_expense_amount = $db_connection->query("SELECT SUM(amount) AS summary FROM expenses WHERE user_id = '$id' AND date_of_expense BETWEEN '$begin' AND '$end'");
+			
+			$result_incomes = $db_connection->query("SELECT cat.name AS inc_name, SUM(inc.amount) AS inc_amount FROM incomes AS inc, incomes_category_assigned_to_users AS cat WHERE inc.user_id = '$id' AND cat.user_id = '$id' AND inc.income_category_assigned_to_user_id = cat.id AND inc.date_of_income BETWEEN '$begin' AND '$end' GROUP BY inc_name ORDER BY inc_amount DESC");
+			
+			$result_expenses = $db_connection->query("SELECT cat.name AS ex_name, SUM(ex.amount) AS ex_amount FROM expenses AS ex, expenses_category_assigned_to_users AS cat WHERE ex.user_id = '$id' AND cat.user_id = '$id' AND ex.expense_category_assigned_to_user_id = cat.id AND ex.date_of_expense BETWEEN '$begin' AND '$end' GROUP BY ex_name ORDER BY ex_amount DESC");
+			
+			if (!$result_income_amount || !$result_expense_amount || !$result_incomes || !$result_expenses)
 				throw new Exception($db_connection->error);
 			
-			$categories_count = $result->num_rows;
-
-			if ($categories_count > 0)
+			if (($result_income_amount->num_rows >= 0) && ($result_expense_amount->num_rows >= 0)
+				&& ($result_incomes->num_rows >= 0) && ($result_expenses->num_rows >= 0))
 			{
+				$income_amount = $result_income_amount->fetch_assoc();
+				$income_total = $income_amount['summary'];
+				if (is_null($income_total))
+					$income_total = 0;
 				
-				while($user_categories = $result->fetch_assoc())
+				$expense_amount = $result_expense_amount->fetch_assoc();
+				$expense_total = $expense_amount['summary'];
+				if (is_null($expense_total))
+					$expense_total = 0;
+				
+				$difference = $income_amount['summary'] - $expense_amount['summary'];
+				
+				$balance_info = "badge badge-success";
+				$balance_comment = "Dobrze zarządzasz! ";
+				if ($difference < 0)
 				{
-					if (isset($_SESSION['ex_payment']) && ($_SESSION['ex_payment'] == $user_categories['id']))
-					{
-						echo "<option value=".$user_categories['id']." selected>".$user_categories['name']."</option>";
-						unset($_SESSION['ex_payment']);
-					}
-					else
-						echo "<option value=".$user_categories['id'].">".$user_categories['name']."</option>";
+					$balance_info = "badge badge-warning";
+					$balance_comment = "Nie wygląda to dobrze... ";
+				}
+					
+echo<<<END
+
+							<div class="row mb-4">
+								<div class="col text-center">
+									<h2 class="h4 d-inline-block"><span class="" id="comment">$balance_comment Masz teraz na koncie:</span></h2>
+									<h2 class="h2 d-inline-block"><span class="$balance_info" id="balance">$difference zł</span></h2>
+								</div>
+							</div>
+							
+							<div class="row mb-2">
+								<div class="col text-left">
+									<h2 class="h5 d-inline-block my-1">Twoje <span class="font-weight-bold h4">przychody</span> w wybranym okreise:</h2>
+									<h2 class="h3 d-inline-block my-1"><span class="badge badge-info" id="incomeSummary">$income_total zł</span></h2>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col">
+									<table class="table table-striped table-dark table-hover table-sm text-light">
+										<thead>
+											<tr>
+												<th scope="col">Kategoria</th>
+												<th scope="col">Kwota</th>
+											</tr>
+										</thead>
+										<tbody>
+END;
+
+				while($income_row = $result_incomes->fetch_assoc())
+				{
+						echo '<tr><td>'.$income_row['inc_name'].'</td><td>'.$income_row['inc_amount'].'</td></tr>';
+				}
+
+echo<<<END
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<div class="row mb-2 mt-3">
+								<div class="col text-left">
+									<h2 class="h5 d-inline-block my-1">Twoje <span class="font-weight-bold h4">wydatki</span> w wybranym okreise:</h2>
+									<h2 class="h3 d-inline-block my-1"><span class="badge badge-info" id="expanseSummary">$expense_total zł</span></h2>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col">
+									<table class="table table-striped table-dark table-hover table-sm text-light">
+										<thead>
+											<tr>
+												<th scope="col">Kategoria</th>
+												<th scope="col">Kwota</th>
+											</tr>
+										</thead>
+										<tbody>
+END;
+
+				while($expense_row = $result_expenses->fetch_assoc())
+				{
+					echo '<tr><td>'.$expense_row['ex_name'].'</td><td>'.$expense_row['ex_amount'].'</td></tr>';
 				}
 				
+echo<<<END
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+							
+END;
 				
-				$result->free();
+				$result_income_amount->free();
+				$result_expense_amount->free();
+				$result_incomes->free();
+				$result_expenses->free();
 			}
 			else
 			{
-				throw new Exception($db_connection->error);
+				throw new Exception("Brak rezultatu<br>");
 			}
-?>
-								
-								</select></div>
-								
-								<div class="col mt-2 mb-4">
-								<label class="mr-sm-2" for="category">Kategoria</label>
-								<select class="custom-select mr-sm-2" name="category" value="<?php
-									if (isset($_SESSION['ex_category']))
-									{
-										echo $_SESSION['ex_category'];
-										unset($_SESSION['ex_category']);
-									}
-								?>">
-								
-<?php
-			$result = $db_connection->query("SELECT id, name FROM expenses_category_assigned_to_users WHERE user_id = '$id'");
-			
-			if (!$result)
-				throw new Exception($db_connection->error);
-			
-			$categories_count = $result->num_rows;
-
-			if ($categories_count > 0)
-			{
-				while($user_categories = $result->fetch_assoc())
-				{
-					if (isset($_SESSION['ex_payment']) && ($_SESSION['ex_category'] == $user_categories['id']))
-					{
-						echo "<option value=".$user_categories['id']." selected>".$user_categories['name']."</option>";
-						unset($_SESSION['ex_payment']);
-					}
-					else
-						echo "<option value=".$user_categories['id'].">".$user_categories['name']."</option>";
-				}
-				
-				$result->free();
-			}
-			else
-			{
-				throw new Exception($db_connection->error);
-			}
-			
 		}
 		
 		$db_connection->close();
 	}
 	catch(Exception $e)
 	{
-		echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.';
+		echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.<br>';
 		echo 'Dev Info: '.$e;
 	}
 
-?>		
-									</select>
-								
-									<div class="form-group mt-2 mb-4">
-										<label for="comment" class="sr-only">Komentarz</label>
-										<input type="text" class="form-control" name="comment" placeholder="Komentarz (opcjonalnie)" aria-describedby="commentHelp" value="<?php
-											if (isset($_SESSION['ex_comment']))
-											{
-												echo $_SESSION['ex_comment'];
-												unset($_SESSION['ex_comment']);
-											}
-										
-										?>">
-										<small id="commentHelp" class="form-text text-warning text-right">Dodatkowy opis, np. weekend w górach, obiad na mieście itp.</small>
-									</div>
-								</div>
-								
-								<input type="submit" class="btn btn-lg btn-block btn-success mb-4" value="Dodaj">
-								<a href="main.php" class="btn btn-sm btn-block btn-outline-danger">Anuluj</a>
-
-							</form>
+?>
+					
+							
 						</div>
 						
 					</div>
+					
 				</article>
 				
 				<footer class="fixed-bottom text-center bg-dark text-white-50" style="border-top: 1px #f2f2f2 dashed">
