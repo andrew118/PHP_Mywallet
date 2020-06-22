@@ -41,16 +41,18 @@
     
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="description" content="Aplikacja do prowadzenia budżetu osobistego lub domowego. Pieniądze pod kontrolą.">
-		<meta name="keywords" content="pieniądze, budżet, wydatki, kontrola, kasa, oszczędzanie, portfel on-line">
-		<meta http-equiv="X-Ua-Compatible" content="IE=edge">
-	
-		<link href="https://fonts.googleapis.com/css?family=Dosis:400,700%7CLobster&display=swap&subset=latin-ext" rel="stylesheet">
-																<!-- %7C == | which is not valid with html standard -->
+	<meta name="description" content="Aplikacja do prowadzenia budżetu osobistego lub domowego. Pieniądze pod kontrolą.">
+	<meta name="keywords" content="pieniądze, budżet, wydatki, kontrola, kasa, oszczędzanie, portfel on-line">
+	<meta http-equiv="X-Ua-Compatible" content="IE=edge">
+
+	<link href="https://fonts.googleapis.com/css?family=Dosis:400,700%7CLobster&display=swap&subset=latin-ext" rel="stylesheet">
+											<!-- %7C == | which is not valid with html standard -->
     
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-		<link rel="stylesheet" href="css/fontello.css" type="text/css">
-		<link rel="stylesheet" href="style.css" type="text/css">
+	<link rel="stylesheet" href="css/fontello.css" type="text/css">
+	<link rel="stylesheet" href="style.css" type="text/css">
+	
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 		
     <title>MyWallet | Weź w garść swoje pieniądze już dziś</title>
 		
@@ -189,6 +191,8 @@
 	require_once "connect.php";
 	mysqli_report(MYSQLI_REPORT_STRICT);
 	
+	$chart_data = Array();
+	
 	try
 	{
 		$db_connection = new mysqli($host, $db_user, $db_password, $db_name);
@@ -295,10 +299,15 @@ echo<<<END
 										</thead>
 										<tbody>
 END;
-
+				$i = 0;
 				while($expense_row = $result_expenses->fetch_assoc())
 				{
 					echo '<tr><td>'.$expense_row['ex_name'].'</td><td>'.$expense_row['ex_amount'].'</td></tr>';
+					
+					$chart_data[$i] = $expense_row['ex_name'];
+					$i++;
+					$chart_data[$i] = $expense_row['ex_amount'];
+					$i++;
 				}
 				
 echo<<<END
@@ -328,13 +337,37 @@ END;
 		echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.<br>';
 		echo 'Dev Info: '.$e;
 	}
-
+print_r($chart_data);
 ?>
 					
 							
 						</div>
 						
 					</div>
+					
+					<canvas id="myChart"></canvas>
+					
+					<script>
+						var context = document.getElementById('myChart').getContext('2d');
+						var chart = new Chart(context, {
+							// The type of chart we want to create
+							type: 'doughnut',
+
+							// The data for our dataset
+							data: {
+								labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+								datasets: [{
+									label: 'My First dataset',
+									backgroundColor: 'rgb(255, 99, 132)',
+									borderColor: 'rgb(255, 99, 132)',
+									data: [0, 10, 5, 2, 20, 30, 45]
+								}]
+							},
+
+							// Configuration options go here
+							options: {}
+						});
+					</script>
 					
 				</article>
 				
