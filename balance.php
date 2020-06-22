@@ -208,13 +208,15 @@
 			
 			$result_expense_amount = $db_connection->query("SELECT SUM(amount) AS summary FROM expenses WHERE user_id = '$id' AND date_of_expense BETWEEN '$begin' AND '$end'");
 			
-
+			$result_incomes = $db_connection->query("SELECT cat.name AS inc_name, SUM(inc.amount) AS inc_amount FROM incomes AS inc, incomes_category_assigned_to_users AS cat WHERE inc.user_id = '$id' AND cat.user_id = '$id' AND inc.income_category_assigned_to_user_id = cat.id AND inc.date_of_income BETWEEN '$begin' AND '$end' GROUP BY inc_name ORDER BY inc_amount DESC");
 			
+			$result_expenses = $db_connection->query("SELECT cat.name AS ex_name, SUM(ex.amount) AS ex_amount FROM expenses AS ex, expenses_category_assigned_to_users AS cat WHERE ex.user_id = '$id' AND cat.user_id = '$id' AND ex.expense_category_assigned_to_user_id = cat.id AND ex.date_of_expense BETWEEN '$begin' AND '$end' GROUP BY ex_name ORDER BY ex_amount DESC");
 			
-			if (!$result_income_amount || !$result_expense_amount)
+			if (!$result_income_amount || !$result_expense_amount || !$result_incomes || !$result_expenses)
 				throw new Exception($db_connection->error);
 			
-			if (($result_income_amount->num_rows > 0) && ($result_expense_amount->num_rows > 0))
+			if (($result_income_amount->num_rows >= 0) && ($result_expense_amount->num_rows >= 0)
+				&& ($result_incomes->num_rows >= 0) && ($result_expenses->num_rows >= 0))
 			{
 				$income_amount = $result_income_amount->fetch_assoc();
 				$income_total = $income_amount['summary'];
@@ -257,32 +259,24 @@ echo<<<END
 									<table class="table table-striped table-dark table-hover table-sm text-light">
 										<thead>
 											<tr>
-												<th scope="col">Data</th>
 												<th scope="col">Kategoria</th>
 												<th scope="col">Kwota</th>
 											</tr>
 										</thead>
 										<tbody>
-											<tr>
-												<td>10-02-2020</td>
-												<td>Wyspłata</td>
-												<td>2450,32</td>
-											</tr>
-											<tr>
-												<td>02-02-2020</td>
-												<td>Darowizna</td>
-												<td>100,00</td>
-											</tr>
-											<tr>
-												<td>29-02-2020</td>
-												<td>Odsetki bankowe</td>
-												<td>0,24</td>
-											</tr>
+END;
+
+				while($income_row = $result_incomes->fetch_assoc())
+				{
+						echo '<tr><td>'.$income_row['inc_name'].'</td><td>'.$income_row['inc_amount'].'</td></tr>';
+				}
+
+echo<<<END
 										</tbody>
 									</table>
 								</div>
 							</div>
-							
+
 							<div class="row mb-2 mt-3">
 								<div class="col text-left">
 									<h2 class="h5 d-inline-block my-1">Twoje <span class="font-weight-bold h4">wydatki</span> w wybranym okreise:</h2>
@@ -295,36 +289,31 @@ echo<<<END
 									<table class="table table-striped table-dark table-hover table-sm text-light">
 										<thead>
 											<tr>
-												<th scope="col">Data</th>
 												<th scope="col">Kategoria</th>
 												<th scope="col">Kwota</th>
 											</tr>
 										</thead>
 										<tbody>
-											<tr>
-												<td>10-02-2020</td>
-												<td>Jedzenie</td>
-												<td>450,32</td>
-											</tr>
-											<tr>
-												<td>02-02-2020</td>
-												<td>Dzieci</td>
-												<td>44,00</td>
-											</tr>
-											<tr>
-												<td>29-02-2020</td>
-												<td>Książki</td>
-												<td>6,00</td>
-											</tr>
+END;
+
+				while($expense_row = $result_expenses->fetch_assoc())
+				{
+					echo '<tr><td>'.$expense_row['ex_name'].'</td><td>'.$expense_row['ex_amount'].'</td></tr>';
+				}
+				
+echo<<<END
+
 										</tbody>
 									</table>
 								</div>
 							</div>
-
+							
 END;
 				
 				$result_income_amount->free();
 				$result_expense_amount->free();
+				$result_incomes->free();
+				$result_expenses->free();
 			}
 			else
 			{
@@ -341,9 +330,7 @@ END;
 	}
 
 ?>
-							
-							
-							
+					
 							
 						</div>
 						
