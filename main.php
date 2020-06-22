@@ -69,9 +69,10 @@
 									<a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false" id="submenu" aria-haspopup="true"><i class="icon-calendar"></i> Przeglądaj bilans </a>
 									
 									<div class="dropdown-menu wallet" aria-labelledby="submenu">
-										
-										<a class="dropdown-item" href="###"> Bierzący miesiąc </a>
-										<a class="dropdown-item" href="###"> Poprzedni miesiąc </a>
+										<form method="post">
+											<input type="submit" name="current" class="dropdown-item btn btn-link" formaction="balance.php" value=" Bierzący miesiąc ">
+											<input type="submit" name="previous" class="dropdown-item btn btn-link" formaction="balance.php" value=" Poprzedni miesiąc ">
+										</form>
 										<button class="dropdown-item btn btn-link"  data-toggle="modal" data-target="#dateRangeModal"> Inny zakres </button>
 										
 									</div>
@@ -104,25 +105,28 @@
 									<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
-							
-							<div class="modal-body">
-								<div class="row">
-									<div class="col-sm-6">
-										<h6 class="h6 text-dark">Podaj datę początkową</h6>
-										<input type="date" class="mb-3 rounded" id="beginDate">
-									</div>
-									
-									<div class="col-sm-6">
-										<h6 class="h6 text-dark">Podaj datę końcową</h6>
-										<input type="date" class="mb-2 rounded" id="endDate">
+							<form action="balance.php" method="post">
+								<div class="modal-body">
+									<div class="row">
+										
+											<div class="col-sm-6">
+												<h6 class="h6 text-dark">Podaj datę początkową</h6>
+												<input type="date" class="mb-3 rounded" name="begin_date">
+											</div>
+											
+											<div class="col-sm-6">
+												<h6 class="h6 text-dark">Podaj datę końcową</h6>
+												<input type="date" class="mb-2 rounded" name="end_date">
+											</div>
+										
 									</div>
 								</div>
-							</div>
-							
-							<div class="modal-footer">
-								<button type="button" class="btn btn-success">Zastosuj</button>
-								<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Porzuć pomysł</button>
-							</div>
+								
+								<div class="modal-footer">
+									<button type="submit" class="btn btn-success">Zastosuj</button>
+									<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Porzuć pomysł</button>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>

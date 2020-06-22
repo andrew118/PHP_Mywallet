@@ -1,3 +1,32 @@
+<?php
+	
+	session_start();
+
+	if (!isset($_SESSION['is_user_logged']) || (!$_SESSION['is_user_logged'] == true))
+	{
+		header('Location: index.php');
+		exit();
+	}
+	
+	$begin_date = new DateTime();
+	$end_date = new DateTime();
+	
+	if (isset($_POST['current']))
+	{
+		$GLOBALS['begin_date']->modify('first day of this month');
+		$GLOBALS['end_date']->modify('last day of this month');
+		unset($_POST['current']);
+	}
+	
+	if (isset($_POST['previous']))
+	{
+		$GLOBALS['begin_date']->modify('first day of previous month');
+		$GLOBALS['end_date']->modify('last day of previous month');
+		unset($_POST['previous']);
+	}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pl">
   <head>
@@ -57,9 +86,10 @@
 									<a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false" id="submenu" aria-haspopup="true"><i class="icon-calendar"></i> Przeglądaj bilans </a>
 									
 									<div class="dropdown-menu wallet" aria-labelledby="submenu">
-										
-										<a class="dropdown-item" href="balance.php"> Bierzący miesiąc </a>
-										<a class="dropdown-item" href="balance.php"> Poprzedni miesiąc </a>
+										<form method="post">
+											<input type="submit" name="current" class="dropdown-item btn btn-link" formaction="balance.php" value=" Bierzący miesiąc ">
+											<input type="submit" name="previous" class="dropdown-item btn btn-link" formaction="balance.php" value=" Poprzedni miesiąc ">
+										</form>
 										<button class="dropdown-item btn btn-link"  data-toggle="modal" data-target="#dateRangeModal"> Inny zakres </button>
 										
 									</div>
@@ -93,24 +123,28 @@
 								</button>
 							</div>
 							
-							<div class="modal-body">
-								<div class="row">
-									<div class="col-sm-6">
-										<h6 class="h6 text-dark">Podaj datę początkową</h6>
-										<input type="date" class="mb-3 rounded" id="beginDate">
-									</div>
-									
-									<div class="col-sm-6">
-										<h6 class="h6 text-dark">Podaj datę końcową</h6>
-										<input type="date" class="mb-2 rounded" id="endDate">
+							<form action="balance.php" method="post">
+								<div class="modal-body">
+									<div class="row">
+										
+											<div class="col-sm-6">
+												<h6 class="h6 text-dark">Podaj datę początkową</h6>
+												<input type="date" class="mb-3 rounded" name="begin_date">
+											</div>
+											
+											<div class="col-sm-6">
+												<h6 class="h6 text-dark">Podaj datę końcową</h6>
+												<input type="date" class="mb-2 rounded" name="end_date">
+											</div>
+										
 									</div>
 								</div>
-							</div>
-							
-							<div class="modal-footer">
-								<button type="button" class="btn btn-success">Zastosuj</button>
-								<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Porzuć pomysł</button>
-							</div>
+								
+								<div class="modal-footer">
+									<button type="submit" class="btn btn-success">Zastosuj</button>
+									<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Porzuć pomysł</button>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -128,7 +162,14 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text px-3">Początek</span>
 											</div>
-											<input type="date" class="form-control" id="daterBegin" value="">
+											<input type="date" class="form-control" id="daterBegin" value="<?php
+											if (isset($_POST['begin_date']))
+											{
+												echo $_POST['begin_date'];
+												unset($_POST['begin_date']);
+											}
+											else
+												echo $begin_date->format('Y-m-d'); ?>">
 										</div>
 								</div>
 								
@@ -138,7 +179,14 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text px-3">Koniec</span>
 											</div>
-											<input type="date" class="form-control" id="daterEnd" value="">
+											<input type="date" class="form-control" id="daterEnd" value="<?php
+											if (isset($_POST['end_date']))
+											{
+												echo $_POST['end_date'];
+												unset($_POST['end_date']);
+											}
+											else
+												echo $end_date->format('Y-m-d'); ?>">
 										</div>
 								</div>
 							</div>
