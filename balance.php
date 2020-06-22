@@ -25,6 +25,14 @@
 		unset($_POST['previous']);
 	}
 
+	if (isset($_POST['begin_date']) && isset($_POST['end_date']))
+	{
+		$GLOBALS['begin_date'] = date_create_from_format('Y-m-d', $_POST['begin_date']);
+		$GLOBALS['end_date'] = date_create_from_format('Y-m-d', $_POST['end_date']);
+		unset($_POST['begin_date']);
+		unset($_POST['end_date']);
+	}
+
 ?>
 
 <!DOCTYPE html>
@@ -86,10 +94,9 @@
 									<a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false" id="submenu" aria-haspopup="true"><i class="icon-calendar"></i> Przeglądaj bilans </a>
 									
 									<div class="dropdown-menu wallet" aria-labelledby="submenu">
-										<form method="post">
-											<input type="submit" name="current" class="dropdown-item btn btn-link" formaction="balance.php" value=" Bierzący miesiąc ">
-											<input type="submit" name="previous" class="dropdown-item btn btn-link" formaction="balance.php" value=" Poprzedni miesiąc ">
-										</form>
+										
+										<a class="dropdown-item" href="balance.php"> Bierzący miesiąc </a>
+										<a class="dropdown-item" href="balance.php"> Poprzedni miesiąc </a>
 										<button class="dropdown-item btn btn-link"  data-toggle="modal" data-target="#dateRangeModal"> Inny zakres </button>
 										
 									</div>
@@ -162,14 +169,7 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text px-3">Początek</span>
 											</div>
-											<input type="date" class="form-control" id="daterBegin" value="<?php
-											if (isset($_POST['begin_date']))
-											{
-												echo $_POST['begin_date'];
-												unset($_POST['begin_date']);
-											}
-											else
-												echo $begin_date->format('Y-m-d'); ?>">
+											<input type="date" class="form-control" id="daterBegin" value="<?php echo $begin_date->format('Y-m-d'); ?>">
 										</div>
 								</div>
 								
@@ -179,14 +179,7 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text px-3">Koniec</span>
 											</div>
-											<input type="date" class="form-control" id="daterEnd" value="<?php
-											if (isset($_POST['end_date']))
-											{
-												echo $_POST['end_date'];
-												unset($_POST['end_date']);
-											}
-											else
-												echo $end_date->format('Y-m-d'); ?>">
+											<input type="date" class="form-control" id="daterEnd" value="<?php echo $end_date->format('Y-m-d'); ?>">
 										</div>
 								</div>
 							</div>
