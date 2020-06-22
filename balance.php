@@ -41,16 +41,18 @@
     
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="description" content="Aplikacja do prowadzenia budżetu osobistego lub domowego. Pieniądze pod kontrolą.">
-		<meta name="keywords" content="pieniądze, budżet, wydatki, kontrola, kasa, oszczędzanie, portfel on-line">
-		<meta http-equiv="X-Ua-Compatible" content="IE=edge">
-	
-		<link href="https://fonts.googleapis.com/css?family=Dosis:400,700%7CLobster&display=swap&subset=latin-ext" rel="stylesheet">
-																<!-- %7C == | which is not valid with html standard -->
+	<meta name="description" content="Aplikacja do prowadzenia budżetu osobistego lub domowego. Pieniądze pod kontrolą.">
+	<meta name="keywords" content="pieniądze, budżet, wydatki, kontrola, kasa, oszczędzanie, portfel on-line">
+	<meta http-equiv="X-Ua-Compatible" content="IE=edge">
+
+	<link href="https://fonts.googleapis.com/css?family=Dosis:400,700%7CLobster&display=swap&subset=latin-ext" rel="stylesheet">
+											<!-- %7C == | which is not valid with html standard -->
     
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-		<link rel="stylesheet" href="css/fontello.css" type="text/css">
-		<link rel="stylesheet" href="style.css" type="text/css">
+	<link rel="stylesheet" href="css/fontello.css" type="text/css">
+	<link rel="stylesheet" href="style.css" type="text/css">
+	
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 		
     <title>MyWallet | Weź w garść swoje pieniądze już dziś</title>
 		
@@ -189,6 +191,8 @@
 	require_once "connect.php";
 	mysqli_report(MYSQLI_REPORT_STRICT);
 	
+	$chart_data = Array();
+	
 	try
 	{
 		$db_connection = new mysqli($host, $db_user, $db_password, $db_name);
@@ -295,10 +299,15 @@ echo<<<END
 										</thead>
 										<tbody>
 END;
-
+				$i = 0;
 				while($expense_row = $result_expenses->fetch_assoc())
 				{
 					echo '<tr><td>'.$expense_row['ex_name'].'</td><td>'.$expense_row['ex_amount'].'</td></tr>';
+					
+					$chart_data[$i] = $expense_row['ex_name'];
+					$i++;
+					$chart_data[$i] = $expense_row['ex_amount'];
+					$i++;
 				}
 				
 echo<<<END
@@ -335,6 +344,72 @@ END;
 						</div>
 						
 					</div>
+							
+					<canvas id="myChart"></canvas>
+					
+					<script>
+					// Helpful website: www.chartjs.org
+						var context = document.getElementById('myChart');
+						var chart = new Chart(context, {
+							// The type of chart we want to create
+							type: "doughnut",
+
+							// The data for our dataset
+							data: {
+								labels: [<?php
+									for($i = 0, $size = count($chart_data); $i < $size; $i += 2)
+									{
+										if ($i == 0)
+											echo '"'.$chart_data[$i].'"';
+										else
+											echo ', "'.$chart_data[$i].'"';
+									}
+								?>],
+								backgroundColor: "rgb(0, 0, 0)",						
+								datasets: [{
+									label: "Wydatki",
+									data: [<?php
+									for($i = 1, $size = count($chart_data); $i < $size; $i += 2)
+									{
+										if ($i == 1)
+											echo '"'.$chart_data[$i].'"';
+										else
+											echo ', "'.$chart_data[$i].'"';
+									}
+									?>],
+									backgroundColor: [<?php for($i = 1, $size = count($chart_data); $i < $size; $i += 2)
+									{
+										$r = rand(0, 255);
+										$g = rand(0, 255);
+										$b = rand(0, 255);
+										
+										if ($i == 1)
+											echo '"rgb('.$r.', '.$g.', '.$b.')"';
+										else
+											echo ', "rgb('.$r.', '.$g.', '.$b.')"';
+									}
+									
+									?>],
+									borderColor: "rgb(230, 230, 230)",
+								}]
+							},
+
+							options: {
+								legend: {
+									labels: {
+										fontColor: "rgb(242, 242, 242)",
+										fontSize: 16,
+									}
+								},
+								layout: {
+									padding: {
+										top: 10
+									}
+								}
+							}
+						});
+						
+					</script>
 					
 				</article>
 				
