@@ -33,6 +33,7 @@
 	}
 	
 	require_once "connect.php";
+	mysqli_report(MYSQLI_REPORT_STRICT);
 	
 	if ($form_valid == true)
 	{

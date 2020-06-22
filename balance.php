@@ -94,9 +94,10 @@
 									<a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false" id="submenu" aria-haspopup="true"><i class="icon-calendar"></i> Przeglądaj bilans </a>
 									
 									<div class="dropdown-menu wallet" aria-labelledby="submenu">
-										
-										<a class="dropdown-item" href="balance.php"> Bierzący miesiąc </a>
-										<a class="dropdown-item" href="balance.php"> Poprzedni miesiąc </a>
+										<form method="post">
+											<input type="submit" name="current" class="dropdown-item btn btn-link" formaction="balance.php" value=" Bierzący miesiąc ">
+											<input type="submit" name="previous" class="dropdown-item btn btn-link" formaction="balance.php" value=" Poprzedni miesiąc ">
+										</form>
 										<button class="dropdown-item btn btn-link"  data-toggle="modal" data-target="#dateRangeModal"> Inny zakres </button>
 										
 									</div>
@@ -183,18 +184,71 @@
 										</div>
 								</div>
 							</div>
-							
+<?php
+
+	require_once "connect.php";
+	mysqli_report(MYSQLI_REPORT_STRICT);
+	
+	try
+	{
+		$db_connection = new mysqli($host, $db_user, $db_password, $db_name);
+		
+		if ($db_connection->connect_errno !=0)
+		{
+			throw new Exception(mysqli_connect_errno());
+		}
+		else
+		{
+			$id = $_SESSION['logged_user_id'];
+			$begin = $begin_date->format('Y-m-d');
+			$end = $end_date->format('Y-m-d');
+			
+			// balance = incomes - expenses
+			$result_income_amount = $db_connection->query("SELECT SUM(amount) AS summary FROM incomes WHERE user_id = '$id' AND date_of_income BETWEEN '$begin' AND '$end'");
+			
+			$result_expense_amount = $db_connection->query("SELECT SUM(amount) AS summary FROM expenses WHERE user_id = '$id' AND date_of_expense BETWEEN '$begin' AND '$end'");
+			
+
+			
+			
+			if (!$result_income_amount || !$result_expense_amount)
+				throw new Exception($db_connection->error);
+			
+			if (($result_income_amount->num_rows > 0) && ($result_expense_amount->num_rows > 0))
+			{
+				$income_amount = $result_income_amount->fetch_assoc();
+				$income_total = $income_amount['summary'];
+				if (is_null($income_total))
+					$income_total = 0;
+				
+				$expense_amount = $result_expense_amount->fetch_assoc();
+				$expense_total = $expense_amount['summary'];
+				if (is_null($expense_total))
+					$expense_total = 0;
+				
+				$difference = $income_amount['summary'] - $expense_amount['summary'];
+				
+				$balance_info = "badge badge-success";
+				$balance_comment = "Dobrze zarządzasz! ";
+				if ($difference < 0)
+				{
+					$balance_info = "badge badge-warning";
+					$balance_comment = "Nie wygląda to dobrze... ";
+				}
+					
+echo<<<END
+
 							<div class="row mb-4">
 								<div class="col text-center">
-									<h2 class="h4 d-inline-block"><span class="" id="comment">Dobrze zarządzasz! Masz teraz na koncie:</span></h2>
-									<h2 class="h2 d-inline-block"><span class="badge badge-success" id="balance">1234,45 zł</span></h2>
+									<h2 class="h4 d-inline-block"><span class="" id="comment">$balance_comment Masz teraz na koncie:</span></h2>
+									<h2 class="h2 d-inline-block"><span class="$balance_info" id="balance">$difference zł</span></h2>
 								</div>
 							</div>
 							
 							<div class="row mb-2">
 								<div class="col text-left">
 									<h2 class="h5 d-inline-block my-1">Twoje <span class="font-weight-bold h4">przychody</span> w wybranym okreise:</h2>
-									<h2 class="h3 d-inline-block my-1"><span class="badge badge-info" id="incomeSummary">2550,56 zł</span></h2>
+									<h2 class="h3 d-inline-block my-1"><span class="badge badge-info" id="incomeSummary">$income_total zł</span></h2>
 								</div>
 							</div>
 							
@@ -232,7 +286,7 @@
 							<div class="row mb-2 mt-3">
 								<div class="col text-left">
 									<h2 class="h5 d-inline-block my-1">Twoje <span class="font-weight-bold h4">wydatki</span> w wybranym okreise:</h2>
-									<h2 class="h3 d-inline-block my-1"><span class="badge badge-warning" id="expanseSummary">550,56 zł</span></h2>
+									<h2 class="h3 d-inline-block my-1"><span class="badge badge-info" id="expanseSummary">$expense_total zł</span></h2>
 								</div>
 							</div>
 							
@@ -266,6 +320,30 @@
 									</table>
 								</div>
 							</div>
+
+END;
+				
+				$result_income_amount->free();
+				$result_expense_amount->free();
+			}
+			else
+			{
+				throw new Exception("Brak rezultatu<br>");
+			}
+		}
+		
+		$db_connection->close();
+	}
+	catch(Exception $e)
+	{
+		echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.<br>';
+		echo 'Dev Info: '.$e;
+	}
+
+?>
+							
+							
+							
 							
 						</div>
 						
