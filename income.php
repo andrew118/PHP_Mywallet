@@ -170,7 +170,7 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text px-2">Kwota</span>
 											</div>
-											<input type="number" class="form-control" step="0.01" name="money" value="<?php
+											<input type="number" class="form-control" step="0.01" name="money" min="0.00" value="<?php
 											if (isset($_SESSION['in_money']))
 											{
 												echo $_SESSION['in_money'];
