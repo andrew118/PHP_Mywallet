@@ -154,19 +154,19 @@
 										
 											<div class="col-sm-6">
 												<h6 class="h6 text-dark">Podaj datę początkową</h6>
-												<input type="date" class="mb-3 rounded" name="begin_date">
+												<input type="date" class="mb-3 rounded" name="begin_date" id="begin_date">
 											</div>
 											
 											<div class="col-sm-6">
 												<h6 class="h6 text-dark">Podaj datę końcową</h6>
-												<input type="date" class="mb-2 rounded" name="end_date">
+												<input type="date" class="mb-2 rounded" name="end_date" id="end_date">
 											</div>
 										
 									</div>
 								</div>
 								
 								<div class="modal-footer">
-									<button type="submit" class="btn btn-success">Zastosuj</button>
+									<button type="submit" class="btn btn-success" id="modal_submit">Zastosuj</button>
 									<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Porzuć pomysł</button>
 								</div>
 							</form>
@@ -175,32 +175,13 @@
 				</div>
 				
 				<article>
-					<h1 class="h4 mt-4 mb-3 font-weight-bold text-center">Sprawdź bilans w wybranym okresie czasu</h1>
+					<h1 class="h4 mt-4 mb-3 font-weight-bold text-center">Twój bilans w okresie od 
+					<span class="h2 font-weight-bold mx-3" style="letter-spacing: 2px;"><?php echo $begin_date->format('Y-m-d'); ?></span> do <span class="h2 font-weight-bold mx-3" style="letter-spacing: 2px;"><?php echo $end_date->format('Y-m-d'); ?><span></h1>
 					
 					<div class="row mx-2">
 						
 						<div class="col-12 p-3 rounded" style="border: 2px #f2f2f2 dashed">
-							<div class="row">
-								<div class="col mt-2 mb-4">
-									<label class="sr-only">Data początkowa</label>
-										<div class="input-group input-group-lg">
-											<div class="input-group-prepend">
-												<span class="input-group-text px-3">Początek</span>
-											</div>
-											<input type="date" class="form-control" id="daterBegin" value="<?php echo $begin_date->format('Y-m-d'); ?>">
-										</div>
-								</div>
-								
-								<div class="col mt-2 mb-4">
-									<label class="sr-only">Data końcowa</label>
-										<div class="input-group input-group-lg">
-											<div class="input-group-prepend">
-												<span class="input-group-text px-3">Koniec</span>
-											</div>
-											<input type="date" class="form-control" id="daterEnd" value="<?php echo $end_date->format('Y-m-d'); ?>">
-										</div>
-								</div>
-							</div>
+							
 <?php
 
 	require_once "connect.php";
@@ -434,7 +415,9 @@ END;
 				
 			</div>
 		</main>
-		
+	
+	<script src="js/date.js"></script>
+	
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
