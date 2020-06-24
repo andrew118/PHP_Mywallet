@@ -27,10 +27,25 @@
 
 	if (isset($_POST['begin_date']) && isset($_POST['end_date']))
 	{
-		$GLOBALS['begin_date'] = date_create_from_format('Y-m-d', $_POST['begin_date']);
-		$GLOBALS['end_date'] = date_create_from_format('Y-m-d', $_POST['end_date']);
-		unset($_POST['begin_date']);
-		unset($_POST['end_date']);
+		$date1 = explode("-", $_POST['begin_date']);
+		$date2 = explode("-", $_POST['end_date']);
+		$is_correct_date1 = checkdate($date1[1], $date1[2], $date1[0]);
+		$is_correct_date2 = checkdate($date2[1], $date2[2], $date2[0]);
+		
+		if ($is_correct_date1 && $is_correct_date2)
+		{
+			$GLOBALS['begin_date'] = date_create_from_format('Y-m-d', $_POST['begin_date']);
+			$GLOBALS['end_date'] = date_create_from_format('Y-m-d', $_POST['end_date']);
+			unset($_POST['begin_date']);
+			unset($_POST['end_date']);
+		}
+		else
+		{
+			unset($_POST['begin_date']);
+			unset($_POST['end_date']);
+			header('Location: '.$_SERVER['HTTP_REFERER']);
+			exit();
+		}
 	}
 
 ?>
@@ -191,8 +206,6 @@
 	require_once "connect.php";
 	mysqli_report(MYSQLI_REPORT_STRICT);
 	
-	$chart_data = Array();
-	
 	try
 	{
 		$db_connection = new mysqli($host, $db_user, $db_password, $db_name);
@@ -299,7 +312,9 @@ echo<<<END
 										</thead>
 										<tbody>
 END;
+				$chart_data = Array();
 				$i = 0;
+				
 				while($expense_row = $result_expenses->fetch_assoc())
 				{
 					echo '<tr><td>'.$expense_row['ex_name'].'</td><td>'.$expense_row['ex_amount'].'</td></tr>';
