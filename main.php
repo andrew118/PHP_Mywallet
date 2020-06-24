@@ -113,19 +113,19 @@
 										
 											<div class="col-sm-6">
 												<h6 class="h6 text-dark">Podaj datę początkową</h6>
-												<input type="date" class="mb-3 rounded" name="begin_date">
+												<input type="date" class="mb-3 rounded" name="begin_date" id="begin_date">
 											</div>
 											
 											<div class="col-sm-6">
 												<h6 class="h6 text-dark">Podaj datę końcową</h6>
-												<input type="date" class="mb-2 rounded" name="end_date">
+												<input type="date" class="mb-2 rounded" name="end_date" id="end_date">
 											</div>
 										
 									</div>
 								</div>
 								
 								<div class="modal-footer">
-									<button type="submit" class="btn btn-success">Zastosuj</button>
+									<button type="submit" class="btn btn-success" id="modal_submit">Zastosuj</button>
 									<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Porzuć pomysł</button>
 								</div>
 							</form>
@@ -159,7 +159,9 @@
 				
 			</div>
 		</main>
-		
+	
+	<script src="js/date.js"></script>
+	
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
