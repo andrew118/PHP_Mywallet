@@ -26,14 +26,12 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<link rel="stylesheet" href="css/fontello.css" type="text/css">
 	<link rel="stylesheet" href="style.css" type="text/css">
-	
-	<script src="js/comment.js"></script>
 		
     <title>MyWallet | Weź w garść swoje pieniądze już dziś</title>
 		
   </head>
 	
-  <body onload="dayComment();">
+  <body>
     <main>
 			<div class="container mb-5">
 				
@@ -138,15 +136,7 @@
 					<div class="row">
 						<div class="col-12 text-center mt-4">
 							
-							<h3 class="h2 mb-4">Witaj <span class="text-capitalize">
-							<?php
-								echo $_SESSION['user'];
-							?>
-							</span>!</h3>
-							<p class="h4">Miło, że tu zajrzałeś</p>
-							<p class="h4 mt-2 mb-4">Dziś <span id="dayOfWeek"></span></p>
-							<img src="img/save.jpg" class="img-thumbnail" alt="Oszczędzaj pieniądze" />
-							<p class="h4 mt-2">Zerknijmy jak mają się Twoje finanse...</p>
+							<h3 class="h2 mb-4">Strona w konstrukcji</h3>
 							
 						</div>
 					</div>
