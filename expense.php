@@ -216,6 +216,8 @@
 		}
 		else
 		{
+			$db_connection->set_charset("utf8");
+			
 			$id = $_SESSION['logged_user_id'];
 			$result = $db_connection->query("SELECT id, name FROM payment_methods_assigned_to_users WHERE user_id = '$id'");
 			

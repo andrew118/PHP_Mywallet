@@ -21,6 +21,8 @@
 		}
 		else
 		{
+			$db_connection->set_charset("utf8");
+			
 			$login = $_POST['login'];
 			$password = $_POST['password'];
 			

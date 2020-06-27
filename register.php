@@ -2,7 +2,7 @@
 
 	session_start();
 	
-	if (isset($_SESSION['is_user_logged']) || ($_SESSION['is_user_logged'] == true))
+	if (isset($_SESSION['is_user_logged']))
 	{
 		header('Location: main.php');
 		exit();
@@ -72,6 +72,8 @@
 			}
 			else
 			{
+				$db_connection->set_charset("utf8");
+				
 				$result = $db_connection->query("SELECT id FROM users WHERE email='$email'");
 				
 				if (!$result)
