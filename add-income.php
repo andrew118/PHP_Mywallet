@@ -47,6 +47,8 @@
 			}
 			else
 			{
+				$db_connection->set_charset("utf8");
+				
 				$user_id = $_SESSION['logged_user_id'];
 				$user_money = $_POST['money'];
 				$user_date = $_POST['dater'];
@@ -80,7 +82,6 @@
 		catch(Exception $e)
 		{
 			echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.';
-			echo 'Dev Info: '.$e;
 		}
 	}
 

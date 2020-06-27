@@ -197,6 +197,8 @@
 		}
 		else
 		{
+			$db_connection->set_charset("utf8");
+			
 			$id = $_SESSION['logged_user_id'];
 			$begin = $begin_date->format('Y-m-d');
 			$end = $end_date->format('Y-m-d');
@@ -331,7 +333,6 @@ END;
 	catch(Exception $e)
 	{
 		echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.<br>';
-		echo 'Dev Info: '.$e;
 	}
 
 ?>

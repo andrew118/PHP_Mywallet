@@ -21,6 +21,8 @@
 		}
 		else
 		{
+			$db_connection->set_charset("utf8");
+			
 			$login = $_POST['login'];
 			$password = $_POST['password'];
 			
@@ -72,7 +74,6 @@
 	catch(Exception $e)
 	{
 		echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.';
-		echo 'Dev Info: '.$e;
 	}
 	
 ?>

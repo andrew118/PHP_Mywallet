@@ -2,6 +2,12 @@
 
 	session_start();
 	
+	if (isset($_SESSION['is_user_logged']))
+	{
+		header('Location: main.php');
+		exit();
+	}
+	
 	if (isset($_POST['email']))
 	{
 		$form_valid = true;
@@ -66,6 +72,8 @@
 			}
 			else
 			{
+				$db_connection->set_charset("utf8");
+				
 				$result = $db_connection->query("SELECT id FROM users WHERE email='$email'");
 				
 				if (!$result)
@@ -141,7 +149,6 @@
 		catch(Exception $e)
 		{
 			echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.';
-			echo 'Dev Info: '.$e;
 		}
 	}
 

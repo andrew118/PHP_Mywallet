@@ -1,5 +1,5 @@
 <?php
-	
+
 	session_start();
 
 	if (!isset($_SESSION['is_user_logged']) || (!$_SESSION['is_user_logged'] == true))
@@ -8,8 +8,6 @@
 		exit();
 	}
 	
-	$today = date('Y-m-d');
-
 ?>
 
 <!DOCTYPE html>
@@ -18,20 +16,18 @@
     
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="description" content="Aplikacja do prowadzenia budżetu osobistego lub domowego. Pieniądze pod kontrolą.">
-		<meta name="keywords" content="pieniądze, budżet, wydatki, kontrola, kasa, oszczędzanie, portfel on-line">
-		<meta http-equiv="X-Ua-Compatible" content="IE=edge">
-	
-		<link href="https://fonts.googleapis.com/css?family=Dosis:400,700%7CLobster&display=swap&subset=latin-ext" rel="stylesheet">
+	<meta name="description" content="Aplikacja do prowadzenia budżetu osobistego lub domowego. Pieniądze pod kontrolą.">
+	<meta name="keywords" content="pieniądze, budżet, wydatki, kontrola, kasa, oszczędzanie, portfel on-line">
+	<meta http-equiv="X-Ua-Compatible" content="IE=edge">
+
+	<link href="https://fonts.googleapis.com/css?family=Dosis:400,700%7CLobster&display=swap&subset=latin-ext" rel="stylesheet">
 																<!-- %7C == | which is not valid with html standard -->
     
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-		<link rel="stylesheet" href="css/fontello.css" type="text/css">
-		<link rel="stylesheet" href="style.css" type="text/css">
+	<link rel="stylesheet" href="css/fontello.css" type="text/css">
+	<link rel="stylesheet" href="style.css" type="text/css">
 		
     <title>MyWallet | Weź w garść swoje pieniądze już dziś</title>
-	
-	
 		
   </head>
 	
@@ -61,7 +57,7 @@
 						
 							<ul class="navbar-nav">
 								
-								<li class="nav-item active">
+								<li class="nav-item">
 									<a class="nav-link" href="income.php"><i class="icon-money"></i> Dodaj przychód </a>
 								</li>
 								
@@ -99,7 +95,7 @@
 					
 				</header>
 				
-								<!-- MODAL STARTS HERE -->
+												<!-- MODAL STARTS HERE -->
 				<div class="modal fade" id="dateRangeModal" tabindex="-1" role="dialog" aria-labelledby="dateRangeInput" aria-hidden="true">
 					<div class="modal-dialog modal-dialog-centered" role="document">
 						<div class="modal-content">
@@ -109,7 +105,6 @@
 									<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
-							
 							<form action="balance.php" method="post">
 								<div class="modal-body">
 									<div class="row">
@@ -135,149 +130,18 @@
 						</div>
 					</div>
 				</div>
-
-				<article>
-					<h1 class="h4 mt-4 mb-3 font-weight-bold text-center">Dodaj swoje przychody</h1>
-					
-					<?php
-					
-					if (isset($_SESSION['e_money']))
-					{	
-						echo $_SESSION['e_money'];
-						unset($_SESSION['e_money']);
-					}
-					else if (isset($_SESSION['e_date']))
-					{
-						echo $_SESSION['e_date'];
-						unset($_SESSION['e_date']);
-					}
-					else if (isset($_SESSION['income_succed']))
-					{
-						echo $_SESSION['income_succed'];
-						unset($_SESSION['income_succed']);
-					}
-					
-					?>
-					
-					<div class="row mx-2">
-						
-						<div class="col-sm-10 col-md-8 col-lg-6 mx-auto p-3 rounded" style="border: 2px #f2f2f2 dashed">
-							<form action="add-income.php" method="post">
-															
-								<div class="col">
-									<label class="sr-only">Kwota</label>
-										<div class="input-group input-group-lg">
-											<div class="input-group-prepend">
-												<span class="input-group-text px-2">Kwota</span>
-											</div>
-											<input type="number" class="form-control" step="0.01" name="money" min="0.00" value="<?php
-											if (isset($_SESSION['in_money']))
-											{
-												echo $_SESSION['in_money'];
-												unset($_SESSION['in_money']);
-											}
-											else	
-												echo "0.00"; ?>">
-										</div>
-								</div>
-								
-								<div class="col mt-2 mb-4">
-									<label class="sr-only">Data</label>
-										<div class="input-group input-group-lg">
-											<div class="input-group-prepend">
-												<span class="input-group-text px-3">Data</span>
-											</div>
-											<input type="date" class="form-control" name="dater" value="<?php
-											if (isset($_SESSION['in_dater']))
-											{
-												echo $_SESSION['in_dater'];
-												unset($_SESSION['in_dater']);
-											}
-											else	
-												echo $today; ?>">
-										</div>
-								</div>
-																
-								<div class="col mt-2 mb-4">
-									<label class="mr-sm-2" for="categoty">Kategoria</label>
-									<select class="custom-select mr-sm-2" name="category">
-											
-<?php
-	
-	require_once "connect.php";
-	mysqli_report(MYSQLI_REPORT_STRICT);
-	
-	try
-	{
-		$db_connection = new mysqli($host, $db_user, $db_password, $db_name);
-		
-		if ($db_connection->connect_errno !=0)
-		{
-			throw new Exception(mysqli_connect_errno());
-		}
-		else
-		{
-			$db_connection->set_charset("utf8");
-			
-			$id = $_SESSION['logged_user_id'];
-			$result = $db_connection->query("SELECT id, name FROM incomes_category_assigned_to_users WHERE user_id = '$id'");
-			
-			if (!$result)
-				throw new Exception($db_connection->error);
-			
-			$categories_count = $result->num_rows;
-
-			if ($categories_count > 0)
-			{
-				while($user_categories = $result->fetch_assoc())
-				{
-					if (isset($_SESSION['in_category']) && ($_SESSION['in_category'] == $user_categories['id']))
-					{
-						echo "<option value=".$user_categories['id']." selected>".$user_categories['name']."</option>";
-						unset($_SESSION['in_category']);
-					}
-					echo "<option value=".$user_categories['id'].">".$user_categories['name']."</option>";
-				}
-				$result->free();
-			}
-			else
-			{
-				throw new Exception($db_connection->error);
-			}
-		}
-		
-		$db_connection->close();
-	}
-	catch(Exception $e)
-	{
-		echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.';
-	}
-
-?>
-									</select>
-									
-								
-									<div class="form-group mt-2 mb-4">
-										<label for="comment" class="sr-only">Komentarz</label>
-										<input type="text" class="form-control" name="comment" placeholder="Komentarz (opcjonalnie)" value="<?php
-											if (isset($_SESSION['in_comment']))
-											{
-												echo $_SESSION['in_comment'];
-												unset($_SESSION['in_comment']);
-											}
-											?>" aria-describedby="commentHelp">
-										<small id="commentHelp" class="form-text text-warning text-right">Dodatkowy opis, np. sprzedany rower, dywidendy itp.</small>
-									</div>
-								</div>
-								
-								<input type="submit" class="btn btn-lg btn-block btn-success mb-4" value="Dodaj">
-								<a href="main.php" class="btn btn-sm btn-block btn-outline-danger">Anuluj</a>
-
-							</form>
+				
+				<section>
+				
+					<div class="row">
+						<div class="col-12 text-center mt-4">
+							
+							<h3 class="h2 mb-4">Strona w konstrukcji</h3>
+							
 						</div>
-						
 					</div>
-				</article>
+				
+				</section>
 				
 				<footer class="fixed-bottom text-center bg-dark text-white-50" style="border-top: 1px #f2f2f2 dashed">
 					Created by &copy; ANDREW

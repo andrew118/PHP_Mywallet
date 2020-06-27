@@ -82,7 +82,7 @@
 								</li>
 								
 								<li class="nav-item">
-									<a class="nav-link" href="###"><i class="icon-conf"></i> Ustawienia </a>
+									<a class="nav-link" href="settings.php"><i class="icon-conf"></i> Ustawienia </a>
 								</li>
 								
 								<li class="nav-item">
