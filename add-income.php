@@ -80,7 +80,6 @@
 		catch(Exception $e)
 		{
 			echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.';
-			echo 'Dev Info: '.$e;
 		}
 	}
 

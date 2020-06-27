@@ -331,7 +331,6 @@ END;
 	catch(Exception $e)
 	{
 		echo 'Błąd serwera. Przepraszamy za niedogodności. Spróbuj ponownie później.<br>';
-		echo 'Dev Info: '.$e;
 	}
 
 ?>
